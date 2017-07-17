@@ -1,6 +1,5 @@
 package bots;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
@@ -44,11 +43,11 @@ public class RubilnikBot extends TelegramLongPollingBot {
 
   @Override
   public String getBotUsername() {
-    return "RatingHelperBot";
+    return appContext.getEnvironment().getProperty("telegram.bot.name");
   }
 
   @Override
   public String getBotToken() {
-    return "262114337:AAHwzwVOaQ-LYm_2YRgPLYmYMr1xFEa1mfI";
+    return appContext.getEnvironment().getProperty("telegram.bot.tocken");
   }
 }
