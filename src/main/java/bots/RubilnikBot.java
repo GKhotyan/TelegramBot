@@ -43,11 +43,11 @@ public class RubilnikBot extends TelegramLongPollingBot {
 
   @Override
   public String getBotUsername() {
-    return appContext.getEnvironment().getProperty("telegram.bot.name");
+    return appContext.getEnvironment().getProperty("bot.name");
   }
 
   @Override
   public String getBotToken() {
-    return appContext.getEnvironment().getProperty("telegram.bot.tocken");
+    return appContext.getEnvironment().getProperty("bot.tocken");
   }
 }
