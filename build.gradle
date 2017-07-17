@@ -1,0 +1,90 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.4.1.RELEASE")
+        classpath('se.transmode.gradle:gradle-docker:1.2')
+    }
+}
+
+group = 'springio'
+
+apply plugin: 'base'
+apply plugin: 'java'
+apply plugin: 'groovy'
+apply plugin: 'application'
+apply plugin: 'idea'
+apply plugin: 'spring-boot'
+apply plugin: 'docker'
+
+version = '1.0'
+
+repositories {
+    mavenCentral()
+    maven { url 'http://repo.spring.io/libs-milestone'}
+    maven { url 'http://repo.spring.io/libs-release'}
+    maven { url "https://jitpack.io" }
+}
+
+
+ext {
+    springVersion = '4.3.2.RELEASE'
+    groovyVersion = '2.4.7'
+    junitVersion = '4.12'
+    log4jVersion = '1.2.17'
+}
+
+dependencies {
+
+    compile group: 'org.telegram', name: 'telegrambots', version: '3.1.0'
+    compile group: 'org.hibernate', name: 'hibernate-validator', version: '5.2.4.Final'
+
+    compile 'com.github.pengrad:java-telegram-bot-api:2.1.1'
+
+    compile "org.springframework:spring-context:$springVersion"
+    compile "org.springframework:spring-context-support:$springVersion"
+
+    compile 'org.springframework.boot:spring-boot-starter:1.4.1.RELEASE'
+
+    compile group: 'org.jsoup', name: 'jsoup', version: '1.7.1'
+
+}
+
+sourceSets {
+    main {
+        groovy {
+            srcDirs = ['src/main/groovy']
+        }
+    }
+
+    main {
+        java {
+            srcDirs = ['src/main/java']
+        }
+        resources {
+            srcDir 'src/main/resources'
+            include '*.properties'
+            include '**/*.groovy'
+            include '*.yml'
+            output.resourcesDir = 'build/classes/main'
+        }
+    }
+}
+
+sourceSets.main.java.srcDirs = []
+sourceSets.main.groovy.srcDirs = ["src/main/java", "src/main/groovy"]
+
+task fatJar(type: Jar) {
+    manifest {
+        attributes 'Implementation-Title': project.name,
+                'Implementation-Version': version,
+                'Main-Class': 'common.Application'
+    }
+    baseName = project.name + '-all'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
+
+
+

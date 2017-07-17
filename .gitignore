@@ -1,0 +1,14 @@
+
+.idea/
+*.iml
+src/configs/private.properties
+.gradle/
+build/
+/src/main/resources/private.properties
+TelegramBot.ipr
+TelegramBot.iws
+src/main/resources/private.properties
+/src/main/resources/private.yml
+src/main/resources/private.yml
+/logs/app.log
+logs/
