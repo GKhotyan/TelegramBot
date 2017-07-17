@@ -18,6 +18,7 @@ public class RfplNewsPopulator {
     put("Ахмат","Кадыров");
     put("ЦСКА","СКА-Хабаровск");
     put("Черчесов","Романцев");
+
   }};
 
   public String populate(String text){
