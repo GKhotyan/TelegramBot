@@ -10,15 +10,14 @@ public class RfplNewsPopulator {
   HashMap<String, String> replacementMap = new HashMap<String, String>() {{
     put("Манчини","Бышовец");
     put("Дзюба","Бесчастных");
+    put("Дзюбы","Бесчастных");
     put("Кокорин","Ширко");
     put("Зенит","ФК Бомжи");
     put("Гончаренко","Газзаев");
     put("Каррера","Ярцев");
     put("Мутко","Басков");
-    put("Ахмат","Кадыров");
     put("ЦСКА","СКА-Хабаровск");
     put("Черчесов","Романцев");
-
   }};
 
   public String populate(String text){
