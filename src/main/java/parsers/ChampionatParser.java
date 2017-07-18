@@ -27,12 +27,12 @@ public class ChampionatParser {
 
   public void parseNews(){
     try {
+
       Document doc = Jsoup.parse(new URL(url), 30000);
       Elements elements = doc.select("div[class=news__i]");
-      Set<String> newsKeys = new HashSet();
+      championatNewsData.clearCurrentNews();
       for(Element element : elements){
         String key = element.select("span[class=counter _comments _icon js-comments-count]").attr("data-id");
-        newsKeys.add(key);
         String value = element.select("span[class=news__i__text]").text();
         if(value.equals("")){
           value = element.select("span[class=news__i__text _important]").text();
@@ -47,7 +47,7 @@ public class ChampionatParser {
       }
 
       //old news removing
-      championatNewsData.keepOnlyKeys(newsKeys);
+      championatNewsData.clearOld();
     }
     catch (IOException e) {
       e.printStackTrace();
@@ -57,5 +57,6 @@ public class ChampionatParser {
   public static void main(String [] args){
     ChampionatParser championatParser = new ChampionatParser();
     championatParser.parseNews();
+
   }
 }

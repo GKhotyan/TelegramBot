@@ -1,5 +1,6 @@
 package data;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -11,10 +12,18 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Singleton
-public class ChampionatNewsData {
+public class ChampionatNewsData implements Serializable {
   private Map<String, String> currentNewsMap = new LinkedHashMap<>();
   private Set<String> postedKeys = new HashSet<>();
   private Set<String> importantNewsKeys = new HashSet<>();
+
+  public int getNewsSize(){
+    return currentNewsMap.size();
+  }
+
+  public void clearCurrentNews() {
+    currentNewsMap.clear();
+  }
 
   public void removeFromCurrentNews(String key){
     currentNewsMap.remove(key);
@@ -60,9 +69,8 @@ public class ChampionatNewsData {
     return "нет интересных новостей";
   }
 
-  public void keepOnlyKeys(Set<String> keys){
-    currentNewsMap.entrySet().removeIf(e->!keys.contains(e.getKey()));
-    postedKeys.removeIf(e->!keys.contains(e));
-    importantNewsKeys.removeIf(e->!keys.contains(e));
+  public void clearOld(){
+    postedKeys.removeIf(e->!currentNewsMap.containsKey(e));
+    importantNewsKeys.removeIf(e->!currentNewsMap.containsKey(e));
   }
 }
