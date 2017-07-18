@@ -20,7 +20,7 @@ public class RubilnikBot extends TelegramLongPollingBot {
 
   private ApplicationContext appContext;
   String championatImportantNewsPatterns = "интересные новости";
-  String championatNewsPatterns = "бот:новости:еще новости:ещё новости:бля:путин";
+  String championatNewsPatterns = "бот:новости:еще новости:ещё новости";
   String anekdotPatterns = "боян:баян:анекдот";
 
   @Override
