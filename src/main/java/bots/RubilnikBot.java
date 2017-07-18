@@ -54,14 +54,16 @@ public class RubilnikBot extends TelegramLongPollingBot {
         String anekdot = anekdotParser.getAnekdot();
         message = new SendMessage().setChatId(chat_id).setText(anekdot);
       }
+
+      try{
+        sendMessage(message);
+      }
+      catch (TelegramApiException e) {
+        e.printStackTrace();
+      }
+
     }
 
-    try{
-      sendMessage(message);
-    }
-    catch (TelegramApiException e) {
-      e.printStackTrace();
-    }
   }
 
   private boolean coincidence(String text, String pattern){
