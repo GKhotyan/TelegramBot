@@ -53,7 +53,8 @@ public class RubilnikBot extends TelegramLongPollingBot {
       }
 
       try{
-        sendMessage(message);
+        if(message!=null)
+          sendMessage(message);
       }
       catch (TelegramApiException e) {
         e.printStackTrace();
