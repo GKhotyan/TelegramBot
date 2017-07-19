@@ -29,7 +29,6 @@ public class ChampionatParser {
     @Autowired
     private WebClient webClient;
 
-    private static final int DEFAULT_TIMEOUT_MILLIS = 30000;
     String url = "https://www.championat.com/football/_russiapl.html";
     private final static String SCORE_URL = "https://www.championat.com/live/live.json";
 
@@ -65,7 +64,7 @@ public class ChampionatParser {
     public String getScores() {
         StringBuilder result = new StringBuilder();
         try {
-            Optional<JSONObject> json = new JsonClient().httpGet(SCORE_URL);
+            Optional<JSONObject> json = webClient.httpGet(SCORE_URL);
             json.ifPresent(j -> {
                 JSONObject football = (JSONObject) j.get("football");
                 JSONObject match_data = (JSONObject) football.get("match_data");
@@ -91,7 +90,7 @@ public class ChampionatParser {
             return "Все пошло по пизде.";
         }
         if(result.length() == 0) {
-            return "Бот не смог ничего неайти. Неизвестно почему.";
+            return "Бот не смог ничего найти. Виноват - Виталик.";
         }
         return rfplNewsPopulator.populate(result.toString());
     }
