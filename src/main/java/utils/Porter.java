@@ -32,6 +32,9 @@ public class Porter {
     }};
 
     private static String getWord(String sentence) {
+        sentence = sentence.replace(",", "");
+        sentence = sentence.replace("\"", "");
+        sentence = sentence.replace("\'", "");
         sentence = sentence.trim();
         String[] split = sentence.split(" ");
         for(String s: split) {
@@ -68,7 +71,7 @@ public class Porter {
     }
 
     public static void main(String[] args) {
-        String st = "Кто научил бота ругаться";
+        String st = "Кто? научил бота ругаться";
         String red = transform(st);
         System.out.println(red);
 
