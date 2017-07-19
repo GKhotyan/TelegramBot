@@ -22,7 +22,7 @@ public class RubilnikBot extends TelegramLongPollingBot {
   }
 
   private ApplicationContext appContext;
-  String championatNewsPatterns = "бот:новост:что нового";
+  String championatNewsPatterns = "новост:что нового";
   String anekdotPatterns = "боян:баян:анекдот";
   String scorePatterns = "счет:как сыграли:кто ведет";
   String swearPatterns = "бот";
@@ -57,11 +57,11 @@ public class RubilnikBot extends TelegramLongPollingBot {
       }
       else if (coincidence(message_text, scorePatterns)) {
         ChampionatParser parser = (ChampionatParser) appContext.getBean("championatParser");
-        new SendMessage().setChatId(chat_id).setText(parser.getScores());
+        message = new SendMessage().setChatId(chat_id).setText(parser.getScores());
       }
       else if (coincidence(message_text, swearPatterns)) {
         String mess = message_text.replace("бот", "");
-        new SendMessage().setChatId(chat_id).setText(Porter.transform(mess));
+        message = new SendMessage().setChatId(chat_id).setText(Porter.transform(mess));
       }
 
       try{
