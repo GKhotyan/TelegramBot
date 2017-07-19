@@ -24,7 +24,7 @@ public class RubilnikBot extends TelegramLongPollingBot {
   private ApplicationContext appContext;
   String championatNewsPatterns = "новост:что нового";
   String anekdotPatterns = "боян:баян:анекдот";
-  String scorePatterns = "счет:как сыграли:кто ведет";
+  String scorePatterns = "счет:счёт:как сыграли:кто ведет";
   String swearPatterns = "бот";
 
   @Override
@@ -60,8 +60,7 @@ public class RubilnikBot extends TelegramLongPollingBot {
         message = new SendMessage().setChatId(chat_id).setText(parser.getScores());
       }
       else if (coincidence(message_text, swearPatterns)) {
-        String mess = message_text.replace("бот", "");
-        message = new SendMessage().setChatId(chat_id).setText(Porter.transform(mess));
+        message = new SendMessage().setChatId(chat_id).setText(Porter.transform(message_text));
       }
 
       try{

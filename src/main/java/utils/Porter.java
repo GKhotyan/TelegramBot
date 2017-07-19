@@ -8,6 +8,7 @@ import com.sun.org.apache.xml.internal.security.signature.SignatureProperty;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 
 public class Porter {
@@ -30,11 +31,17 @@ public class Porter {
         put('у','ю');
     }};
 
-    public static String transform(String word) {
-        word = word.trim();
-        if(word.contains(" ")) {
-            word = word.substring(0, word.indexOf(' '));
+    private static String getWord(String sentence) {
+        sentence = sentence.trim();
+        String[] split = sentence.split(" ");
+        for(String s: split) {
+            if(s.length()>3) return s;
         }
+        return sentence;
+    }
+
+    public static String transform(String sentence) {
+        String word = getWord(sentence);
         if(word.length()>3) {
             word = cutBeforeFirstVowel(word);
             while (word.length() > 5) {
@@ -44,10 +51,10 @@ public class Porter {
             if (replacementMap.containsKey(word.charAt(0))) {
                 word = replacementMap.get(word.charAt(0)) + word.substring(1);
             }
-            return "ху" + word;
+            return "Ху" + word.toLowerCase().toLowerCase(new Locale("ru"));
         }
         else {
-            return "хуй" + word;
+            return "Хуе" + word.toLowerCase().toLowerCase(new Locale("ru"));
         }
     }
 
@@ -61,9 +68,8 @@ public class Porter {
     }
 
     public static void main(String[] args) {
-        String st = "бот молчишь";
-        String mess = st.replace("бот", "");
-        String red = transform(mess);
+        String st = "Кто научил бота ругаться";
+        String red = transform(st);
         System.out.println(red);
 
     }
