@@ -1,22 +1,21 @@
 package parsers;
 
-import java.io.IOException;
-import java.net.URL;
-
+import data.ChampionatNewsData;
+import data.serialize.ChampionatNewsSerializer;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.jsoup.Jsoup;
-
-import data.ChampionatNewsData;
-import data.serialize.ChampionatNewsSerializer;
 import populators.RfplNewsPopulator;
-import utils.net.JsonClient;
 import utils.net.WebClient;
+
+import java.io.IOException;
+import java.net.URL;
+import java.util.Optional;
 
 @Component
 public class ChampionatParser {
@@ -27,12 +26,10 @@ public class ChampionatParser {
   ChampionatNewsSerializer championatNewsSerializer;
   @Autowired
   RfplNewsPopulator rfplNewsPopulator;
-  RfplNewsPopulator rfplNewsPopulator;
   @Autowired
   private WebClient webClient;
 
   private final static String SCORE_URL = "https://www.championat.com/live/live.json";
-  String url = "https://www.championat.com/football/_russiapl.html";
   private static final String url = "https://www.championat.com/football/_russiapl.html";
 
   public void parseNews(){
