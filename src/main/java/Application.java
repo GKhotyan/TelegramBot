@@ -13,7 +13,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 })
 @EnableAutoConfiguration
 @EnableScheduling
-@ComponentScan(basePackages = {"common", "utils", "bots", "parsers", "schedulers", "data", "populators"})
+@ComponentScan(basePackages = {"common", "utils", "bots", "parsers", "schedulers", "data", "populators", "utils"})
 public class Application {
 
   public static void main(String[] args) throws Exception {
