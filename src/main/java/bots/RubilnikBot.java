@@ -12,6 +12,7 @@ import org.telegram.telegrambots.exceptions.TelegramApiException;
 import data.ChampionatNewsData;
 import parsers.AnekdotParser;
 import parsers.ChampionatParser;
+import utils.Porter;
 
 @Component
 public class RubilnikBot extends TelegramLongPollingBot {
@@ -21,9 +22,10 @@ public class RubilnikBot extends TelegramLongPollingBot {
 
   private ApplicationContext appContext;
   String championatImportantNewsPatterns = "интересные новости";
-  String championatNewsPatterns = "бот:новости:еще новости:ещё новости";
+  String championatNewsPatterns = "новости:еще новости:ещё новости";
   String anekdotPatterns = "боян:баян:анекдот";
   String scorePatterns = "счет:как сыграли:кто ведет";
+  String swearPatterns = "бот";
 
   @Override
   public void onUpdateReceived(Update update) {
@@ -59,6 +61,10 @@ public class RubilnikBot extends TelegramLongPollingBot {
       else if (coincidence(message_text, scorePatterns)) {
         ChampionatParser parser = (ChampionatParser) appContext.getBean("championatParser");
         new SendMessage().setChatId(chat_id).setText(parser.getScores());
+      }
+      else if (coincidence(message_text, swearPatterns)) {
+        String mess = message_text.replace("бот", "");
+        new SendMessage().setChatId(chat_id).setText(Porter.transform(mess));
       }
 
       try{
