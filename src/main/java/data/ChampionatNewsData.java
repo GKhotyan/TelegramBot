@@ -15,34 +15,19 @@ import org.springframework.stereotype.Component;
 public class ChampionatNewsData implements Serializable {
   private Map<String, String> currentNewsMap = new LinkedHashMap<>();
   private Set<String> postedKeys = new HashSet<>();
-  private Set<String> importantNewsKeys = new HashSet<>();
 
-  public int getNewsSize(){
-    return currentNewsMap.size();
+  private static final String no_news = "нет никаких новостей";
+
+  public int getPostedKeysSize(){
+    return postedKeys.size();
   }
 
   public void clearCurrentNews() {
     currentNewsMap.clear();
   }
 
-  public void removeFromCurrentNews(String key){
-    currentNewsMap.remove(key);
-  }
-
-  public void removeFromPostedKeys(String key){
-    postedKeys.remove(key);
-  }
-
   public void addToCurrentNews(String key, String text){
     currentNewsMap.put(key, text);
-  }
-
-  public void addToPosted(String key){
-    postedKeys.add(key);
-  }
-
-  public void addToImportant(String key){
-    importantNewsKeys.add(key);
   }
 
   public boolean isCurrentNewsContains(String key){
@@ -56,21 +41,20 @@ public class ChampionatNewsData implements Serializable {
         return currentNewsMap.get(key);
       }
     }
-    return "нет никаких новостей";
-  }
-
-  public String getNextImportantNews(){
-    for(String key : currentNewsMap.keySet()){
-      if(!postedKeys.contains(key) && importantNewsKeys.contains(key)){
-        postedKeys.add(key);
-        return currentNewsMap.get(key);
-      }
-    }
-    return "нет интересных новостей";
+    return no_news;
   }
 
   public void clearOld(){
     postedKeys.removeIf(e->!currentNewsMap.containsKey(e));
-    importantNewsKeys.removeIf(e->!currentNewsMap.containsKey(e));
+  }
+
+  public Set<String> getPostedKeys(){
+    Set<String> postedKeysCopy = new HashSet<>();
+    postedKeysCopy.addAll(this.postedKeys);
+    return postedKeysCopy;
+  }
+
+  public void addPostedKeys(Set<String> postedKeys){
+    this.postedKeys.addAll(postedKeys);
   }
 }

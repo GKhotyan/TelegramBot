@@ -2,7 +2,6 @@ package parsers;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.*;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -14,6 +13,7 @@ import org.springframework.stereotype.Component;
 import org.jsoup.Jsoup;
 
 import data.ChampionatNewsData;
+import data.serialize.ChampionatNewsSerializer;
 import populators.RfplNewsPopulator;
 import utils.net.JsonClient;
 import utils.net.WebClient;
@@ -21,45 +21,45 @@ import utils.net.WebClient;
 @Component
 public class ChampionatParser {
 
-    @Autowired
-    ChampionatNewsData championatNewsData;
-    @Autowired
-    RfplNewsPopulator rfplNewsPopulator;
+  @Autowired
+  ChampionatNewsData championatNewsData;
+  @Autowired
+  ChampionatNewsSerializer championatNewsSerializer;
+  @Autowired
+  RfplNewsPopulator rfplNewsPopulator;
+  RfplNewsPopulator rfplNewsPopulator;
+  @Autowired
+  private WebClient webClient;
 
-    @Autowired
-    private WebClient webClient;
+  private final static String SCORE_URL = "https://www.championat.com/live/live.json";
+  String url = "https://www.championat.com/football/_russiapl.html";
+  private static final String url = "https://www.championat.com/football/_russiapl.html";
 
-    String url = "https://www.championat.com/football/_russiapl.html";
-    private final static String SCORE_URL = "https://www.championat.com/live/live.json";
+  public void parseNews(){
+    try {
+      if(championatNewsData.getPostedKeysSize()==0)
+        championatNewsSerializer.deserializePostedKeys();
 
-
-    public void parseNews() {
-        try {
-
-            Document doc = Jsoup.parse(new URL(url), 30000);
-            Elements elements = doc.select("div[class=news__i]");
-            championatNewsData.clearCurrentNews();
-            for (Element element : elements) {
-                String key = element.select("span[class=counter _comments _icon js-comments-count]").attr("data-id");
-                String value = element.select("span[class=news__i__text]").text();
-                if (value.equals("")) {
-                    value = element.select("span[class=news__i__text _important]").text();
-                    championatNewsData.addToImportant(key);
-                }
-                if (!championatNewsData.isCurrentNewsContains(key)) {
-                    String populated_news = rfplNewsPopulator.populate(value);
-                    championatNewsData.addToCurrentNews(key, populated_news);
-                    if (!populated_news.equals(value))
-                        championatNewsData.addToImportant(key);
-                }
-            }
-
-            //old news removing
-            championatNewsData.clearOld();
-        } catch (IOException e) {
-            e.printStackTrace();
+      Document doc = Jsoup.parse(new URL(url), 30000);
+      Elements elements = doc.select("div[class=news__i]");
+      championatNewsData.clearCurrentNews();
+      for(Element element : elements){
+        String key = element.select("span[class=counter _comments _icon js-comments-count]").attr("data-id");
+        Elements textElements = element.select("span[class=news__i__text _important]");
+        if(textElements.size()>0 && !championatNewsData.isCurrentNewsContains(key)) {
+          String result = textElements.text();
+          String populated_news = rfplNewsPopulator.populate(result);
+          championatNewsData.addToCurrentNews(key, populated_news);
         }
+      }
+
+      //old news removing
+      championatNewsData.clearOld();
     }
+    catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
 
     public String getScores() {
         StringBuilder result = new StringBuilder();
@@ -99,5 +99,5 @@ public class ChampionatParser {
         ChampionatParser championatParser = new ChampionatParser();
         championatParser.getScores();
 
-    }
+  }
 }

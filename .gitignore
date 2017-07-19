@@ -12,4 +12,4 @@ src/main/resources/private.properties
 src/main/resources/private.yml
 /logs/app.log
 logs/
-/championatNewsData.ser
+*.ser

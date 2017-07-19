@@ -10,6 +10,7 @@ import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
 
 import data.ChampionatNewsData;
+import data.serialize.ChampionatNewsSerializer;
 import parsers.AnekdotParser;
 import parsers.ChampionatParser;
 import utils.Porter;
@@ -21,8 +22,7 @@ public class RubilnikBot extends TelegramLongPollingBot {
   }
 
   private ApplicationContext appContext;
-  String championatImportantNewsPatterns = "интересные новости";
-  String championatNewsPatterns = "новости:еще новости:ещё новости";
+  String championatNewsPatterns = "бот:новост:что нового";
   String anekdotPatterns = "боян:баян:анекдот";
   String scorePatterns = "счет:как сыграли:кто ведет";
   String swearPatterns = "бот";
@@ -43,14 +43,11 @@ public class RubilnikBot extends TelegramLongPollingBot {
     }
 
     if(message_text!=null && chat_id!=null) {
-      if (coincidence(message_text, championatImportantNewsPatterns)) {
+      if (coincidence(message_text, championatNewsPatterns)) {
         ChampionatNewsData championatNewsData = (ChampionatNewsData) appContext.getBean("championatNewsData");
-        String news = championatNewsData.getNextImportantNews();
-        message = new SendMessage().setChatId(chat_id).setText(news);
-      }
-      else if (coincidence(message_text, championatNewsPatterns)) {
-        ChampionatNewsData championatNewsData = (ChampionatNewsData) appContext.getBean("championatNewsData");
+        ChampionatNewsSerializer championatNewsSerializer = (ChampionatNewsSerializer) appContext.getBean("championatNewsSerializer");
         String news = championatNewsData.getNextNews();
+        championatNewsSerializer.serializePostedKeys();
         message = new SendMessage().setChatId(chat_id).setText(news);
       }
       else if (coincidence(message_text, anekdotPatterns)) {
@@ -68,7 +65,8 @@ public class RubilnikBot extends TelegramLongPollingBot {
       }
 
       try{
-        sendMessage(message);
+        if(message!=null)
+          sendMessage(message);
       }
       catch (TelegramApiException e) {
         e.printStackTrace();
