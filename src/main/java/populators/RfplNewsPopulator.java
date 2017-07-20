@@ -9,10 +9,9 @@ import org.springframework.stereotype.Component;
 public class RfplNewsPopulator {
   HashMap<String, String> replacementMap = new HashMap<String, String>() {{
     put("Манчини","Бышовец");
-    put("Дзюба","Бесчастных");
-    put("Дзюбы","Бесчастных");
-    put("Кокорин","Ширко");
-    put("Зенит","ФК Бомжи");
+    put("Дзюб\\S","Бесчастных");
+    put("Кокорин\\S","Ширко");
+    put("Зенит\\S","ФК Бомжи");
     put("Гончаренко","Газзаев");
     put("Каррера","Ярцев");
     put("Мутко","Басков");
@@ -25,5 +24,10 @@ public class RfplNewsPopulator {
       text = text.replaceAll(entry.getKey(), entry.getValue());
     }
     return text;
+  }
+
+  public static void main(String [] args){
+    RfplNewsPopulator rfplNewsPopulator = new RfplNewsPopulator();
+    System.out.print(rfplNewsPopulator.populate("Дзюба Дзюбы продул Дзюбе Кокорину"));
   }
 }
