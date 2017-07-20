@@ -11,6 +11,7 @@ import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import populators.RfplNewsPopulator;
+import utils.TelegramSender;
 import utils.net.WebClient;
 
 import java.io.IOException;
@@ -28,6 +29,8 @@ public class ChampionatParser {
   RfplNewsPopulator rfplNewsPopulator;
   @Autowired
   private WebClient webClient;
+  @Autowired
+  TelegramSender telegramSender;
 
   private final static String SCORE_URL = "https://www.championat.com/live/live.json";
   private static final String url = "https://www.championat.com/football/_russiapl.html";
@@ -47,6 +50,11 @@ public class ChampionatParser {
           String result = textElements.text();
           String populated_news = rfplNewsPopulator.populate(result);
           championatNewsData.addToCurrentNews(key, populated_news);
+          if(!populated_news.equals(result)){
+            telegramSender.send(populated_news);
+            championatNewsData.addPostedKey(key);
+            championatNewsSerializer.serializePostedKeys();
+          }
         }
       }
 
