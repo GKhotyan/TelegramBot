@@ -6,4 +6,5 @@ package messages;
 public interface Messenger {
 
     String getMessage();
+    String getMessage(String name);
 }

@@ -56,4 +56,9 @@ public class LiveScoresMessenger implements Messenger {
         return rfplNewsPopulator.populate(result.toString());
     }
 
+    @Override
+    public String getMessage(String name) {
+        throw new UnsupportedOperationException();
+    }
+
 }

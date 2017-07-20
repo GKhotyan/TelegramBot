@@ -42,6 +42,11 @@ public class AvdotyaMessenger implements Messenger {
         return "Ничего не найдено. Все из-за VitalyVk";
     }
 
+    @Override
+    public String getMessage(String name) {
+        throw new UnsupportedOperationException();
+    }
+
     private String currentDate() {
         SimpleDateFormat sdf = new SimpleDateFormat("M/d");
         return sdf.format(new Date());
