@@ -12,7 +12,6 @@ group = 'springio'
 
 apply plugin: 'base'
 apply plugin: 'java'
-apply plugin: 'groovy'
 apply plugin: 'application'
 apply plugin: 'idea'
 apply plugin: 'spring-boot'
@@ -49,16 +48,11 @@ dependencies {
 
     compile group: 'org.jsoup', name: 'jsoup', version: '1.7.1'
     compile group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1'
-    compileOnly 'org.projectlombok:lombok:1.16.18'
+    compile 'org.projectlombok:lombok:1.16.18'
 
 }
 
 sourceSets {
-    main {
-        groovy {
-            srcDirs = ['src/main/groovy']
-        }
-    }
 
     main {
         java {
@@ -74,8 +68,11 @@ sourceSets {
     }
 }
 
-sourceSets.main.java.srcDirs = []
-sourceSets.main.groovy.srcDirs = ["src/main/java", "src/main/groovy"]
+springBoot {
+    mainClass = "ru.rubilnik.bot.Application"
+}
+
+sourceSets.main.java.srcDirs = ["src/main/java"]
 
 task fatJar(type: Jar) {
     manifest {
