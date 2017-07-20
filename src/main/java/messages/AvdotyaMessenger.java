@@ -4,6 +4,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 import java.net.URL;
@@ -24,7 +25,16 @@ public class AvdotyaMessenger implements Messenger {
             Document doc = Jsoup.parse(new URL(url), 30000);
             Elements elements = doc.select("div#content > p");
             if (elements != null && elements.size() >= 2) {
-                return elements.get(2).text();
+                String header = elements.get(1).text();
+                if(!StringUtils.isEmpty(header)) {
+                    if(header.contains("(")) {
+                        header = header.substring(0, header.indexOf("(")).trim() + ".\n";
+                    }
+                }
+                else {
+                    header = "";
+                }
+                return header + elements.get(2).text();
             }
         } catch (IOException e) {
             e.printStackTrace();
