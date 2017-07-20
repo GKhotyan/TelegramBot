@@ -1,2 +1,2 @@
 championat.news.cron: 0 0/10 * * * *
-rubilnik.scheduler.cron: 0 0 14 * * *
+rubilnik.scheduler.cron: 0 0 10 * * *
