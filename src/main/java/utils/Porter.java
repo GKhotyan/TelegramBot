@@ -71,7 +71,7 @@ public class Porter {
     }
 
     public static void main(String[] args) {
-        String st = "Кто? научил бота ругаться";
+        String st = "Кто, научил бота ругаться";
         String red = transform(st);
         System.out.println(red);
 

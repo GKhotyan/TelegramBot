@@ -2,6 +2,9 @@ package bots;
 
 import java.util.stream.Stream;
 
+import messages.AvdotyaMessenger;
+import messages.LiveScoresMessenger;
+import messages.Messenger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
@@ -25,6 +28,7 @@ public class RubilnikBot extends TelegramLongPollingBot {
   String championatNewsPatterns = "новост:что нового";
   String anekdotPatterns = "боян:баян:анекдот";
   String scorePatterns = "счет:счёт:как сыграл:кто ведет";
+  String avdotyaPatterns = "авдотья";
   String swearPatterns = "бот";
 
   @Override
@@ -56,8 +60,12 @@ public class RubilnikBot extends TelegramLongPollingBot {
         message = new SendMessage().setChatId(chat_id).setText(anekdot);
       }
       else if (coincidence(message_text, scorePatterns)) {
-        ChampionatParser parser = (ChampionatParser) appContext.getBean("championatParser");
-        message = new SendMessage().setChatId(chat_id).setText(parser.getScores());
+        Messenger parser = (LiveScoresMessenger) appContext.getBean("liveScoresMessenger");
+        message = new SendMessage().setChatId(chat_id).setText(parser.getMessage());
+      }
+      else if (coincidence(message_text, avdotyaPatterns)) {
+        Messenger parser = (AvdotyaMessenger) appContext.getBean("avdotyaMessenger");
+        message = new SendMessage().setChatId(chat_id).setText(parser.getMessage());
       }
       else if (coincidence(message_text, swearPatterns)) {
         message = new SendMessage().setChatId(chat_id).setText(Porter.transform(message_text));
