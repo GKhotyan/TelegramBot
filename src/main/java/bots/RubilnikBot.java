@@ -1,5 +1,7 @@
 package bots;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 import java.util.stream.Stream;
 
@@ -25,7 +27,7 @@ import utils.Porter;
 @Component
 public class RubilnikBot extends TelegramLongPollingBot {
 
-  ContactCount contactCount = ContactCount.emptyInstance();
+  private Map<Long, ContactCount> contactCounts = new HashMap<>();
 
   public RubilnikBot(ApplicationContext appContext) {
     this.appContext = appContext;
@@ -70,32 +72,32 @@ public class RubilnikBot extends TelegramLongPollingBot {
         String news = championatNewsData.getNextNews();
         championatNewsSerializer.serializePostedKeys();
         message = new SendMessage().setChatId(chat_id).setText(news);
-        contactCount.updateContact(contact, RequestType.NEWS);
+        updateContact(chat_id, contact, RequestType.NEWS);
       }
       else if (coincidence(message_text, anekdotPatterns)) {
         AnekdotParser anekdotParser = (AnekdotParser) appContext.getBean("anekdotParser");
         String anekdot = anekdotParser.getAnekdot();
         message = new SendMessage().setChatId(chat_id).setText(anekdot);
-        contactCount.updateContact(contact, RequestType.ANEKDOT);
+        updateContact(chat_id, contact, RequestType.ANEKDOT);
       }
       else if (coincidence(message_text, scorePatterns)) {
         Messenger parser = (LiveScoresMessenger) appContext.getBean("liveScoresMessenger");
         message = new SendMessage().setChatId(chat_id).setText(parser.getMessage());
-        contactCount.updateContact(contact, RequestType.LIVE);
+        updateContact(chat_id, contact, RequestType.LIVE);
       }
       else if (coincidence(message_text, avdotyaPatterns)) {
         Messenger parser = (AvdotyaMessenger) appContext.getBean("avdotyaMessenger");
         message = new SendMessage().setChatId(chat_id).setText(parser.getMessage());
-        contactCount.updateContact(contact, RequestType.AVDOTYA);
+        updateContact(chat_id, contact, RequestType.AVDOTYA);
       }
       else if (coincidence(message_text, swearPatterns)) {
         message = new SendMessage().setChatId(chat_id).setText(Porter.transform(message_text));
-        contactCount.updateContact(contact, RequestType.SWEAR);
+        updateContact(chat_id, contact, RequestType.SWEAR);
       }
 
       try{
-          if (contactCount.isOverflowed() && message != null) {
-              String name = contactCount.getName();
+          if (contactCounts.get(chat_id)!=null && contactCounts.get(chat_id).isOverflowed() && message != null) {
+              String name = contactCounts.get(chat_id).getName();
               String[] mess =
                       {
                               name + ", ты заебал.",
@@ -113,6 +115,15 @@ public class RubilnikBot extends TelegramLongPollingBot {
         e.printStackTrace();
       }
     }
+  }
+
+  private void updateContact(Long chatId, String name, RequestType type) {
+      ContactCount contactCount = contactCounts.get(chatId);
+      if(contactCount == null) {
+          contactCount = ContactCount.emptyInstance();
+      }
+      contactCount.updateContact(name, type);
+      contactCounts.put(chatId, contactCount);
   }
 
   private boolean coincidence(String text, String pattern){
