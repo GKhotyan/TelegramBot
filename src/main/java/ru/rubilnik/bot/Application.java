@@ -15,7 +15,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 })
 @EnableAutoConfiguration
 @EnableScheduling
-@ComponentScan(basePackages = {"ru.rubilnik.bot.common", "ru.rubilnik.bot.utils", "ru.rubilnik.bot.bots", "ru.rubilnik.bot.parsers", "ru.rubilnik.bot.schedulers", "ru.rubilnik.bot.data", "ru.rubilnik.bot.populators", "ru.rubilnik.bot.utils", "ru.rubilnik.bot.messages"})
+@ComponentScan(basePackages = {"ru.rubilnik.bot.common", "ru.rubilnik.bot"})
 public class Application {
 
   public static void main(String[] args) throws Exception {
