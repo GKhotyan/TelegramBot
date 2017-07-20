@@ -84,8 +84,9 @@ public class TeamMessenger implements Messenger {
         } else throw new IllegalArgumentException();
     }
 
-    public static void main(String[] args) {
-        System.out.println(new TeamMessenger().getMessage("Арарат"));
+    public static void main(String[] args){
+        String trim = "А что Динамо".trim().substring("А что".length()).replace("?", "").trim();
+        System.out.println(new TeamMessenger().getMessage(trim));
     }
 
 

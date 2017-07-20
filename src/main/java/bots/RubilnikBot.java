@@ -94,7 +94,7 @@ public class RubilnikBot extends TelegramLongPollingBot {
       }
       else if (coincidence(message_text, aboutPatterns)) {
           Messenger parser = (TeamMessenger) appContext.getBean("teamMessenger");
-          message = new SendMessage().setChatId(chat_id).setText(parser.getMessage(message_text.replace(aboutPatterns, "").trim()));
+          message = new SendMessage().setChatId(chat_id).setText(parser.getMessage(message_text.trim().substring(aboutPatterns.length()).replace("?", "").trim()));
           updateContact(chat_id, contact, RequestType.ABOUT_TEAM);
       }
       else if (coincidence(message_text, swearPatterns)) {
