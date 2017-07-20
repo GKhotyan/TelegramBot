@@ -11,12 +11,15 @@ public class RfplNewsPopulator {
     put("Манчини","Бышовец");
     put("Дзюб\\S","Бесчастных");
     put("Кокорин\\S","Ширко");
-    put("Зенит\\S","ФК Бомжи");
+    put("«Зенит\\S","«ФК Бомжи»");
     put("Гончаренко","Газзаев");
     put("Каррера","Ярцев");
     put("Мутко","Басков");
     put("ЦСКА","СКА-Хабаровск");
     put("Черчесов","Романцев");
+    put("КДК","Шойгу");
+    put("РФПЛ","ЛФЛ");
+    put("Кадыров","Собянин");
   }};
 
   public String populate(String text){
@@ -28,6 +31,6 @@ public class RfplNewsPopulator {
 
   public static void main(String [] args){
     RfplNewsPopulator rfplNewsPopulator = new RfplNewsPopulator();
-    System.out.print(rfplNewsPopulator.populate("Дзюба Дзюбы продул Дзюбе Кокорину"));
+    System.out.print(rfplNewsPopulator.populate("РФПЛ Черчесову Дзюбы"));
   }
 }
