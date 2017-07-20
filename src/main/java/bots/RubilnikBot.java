@@ -41,8 +41,8 @@ public class RubilnikBot extends TelegramLongPollingBot {
   String swearPatterns = "бот";
 
   private String getContact(Message message) {
-    if(message!=null && message.getFrom()!=null && message.getFrom().getUserName()!=null) {
-      return message.getFrom().getUserName();
+    if(message!=null && message.getFrom()!=null) {
+      return message.getFrom().getUserName()==null?message.getFrom().getFirstName():message.getFrom().getUserName();
     }
     return null;
   }
