@@ -108,7 +108,7 @@ public class RubilnikBot extends TelegramLongPollingBot {
                               name + ", с тобой не общаюсь",
                               "Отвали", "" +
                               "Я занят, непонятно, " + name + "?",
-                              "Ладно, " + name + ":\n" + message
+                              "Ладно, " + name + ":\n" + message.getText()
                       };
               Random rand = new Random();
               sendMessage(new SendMessage().setChatId(chat_id).setText(mess[rand.nextInt(mess.length)]));
