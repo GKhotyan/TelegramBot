@@ -61,4 +61,8 @@ public class ChampionatNewsData implements Serializable {
   public void addPostedKey(String postedKey){
     this.postedKeys.add(postedKey);
   }
+
+  public boolean isPostedKey(String key){
+    return this.postedKeys.contains(key);
+  }
 }

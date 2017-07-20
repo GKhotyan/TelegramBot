@@ -43,7 +43,7 @@ public class ChampionatParser {
           String result = textElements.text();
           String populated_news = rfplNewsPopulator.populate(result);
           championatNewsData.addToCurrentNews(key, populated_news);
-          if(!populated_news.equals(result)){
+          if(!championatNewsData.isPostedKey(key)&&!populated_news.equals(result)){
             telegramSender.send(populated_news);
             championatNewsData.addPostedKey(key);
             championatNewsSerializer.serializePostedKeys();
