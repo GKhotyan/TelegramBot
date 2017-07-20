@@ -8,6 +8,7 @@ import java.util.stream.Stream;
 import messages.AvdotyaMessenger;
 import messages.LiveScoresMessenger;
 import messages.Messenger;
+import messages.TeamMessenger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -38,6 +39,7 @@ public class RubilnikBot extends TelegramLongPollingBot {
   String anekdotPatterns = "боян:баян:анекдот";
   String scorePatterns = "счет:счёт:как сыграл:кто ведет";
   String avdotyaPatterns = "авдотья";
+  String aboutPatterns = "а что";
   String swearPatterns = "бот";
 
   private String getContact(Message message) {
@@ -90,6 +92,11 @@ public class RubilnikBot extends TelegramLongPollingBot {
         message = new SendMessage().setChatId(chat_id).setText(parser.getMessage());
         updateContact(chat_id, contact, RequestType.AVDOTYA);
       }
+      else if (coincidence(message_text, aboutPatterns)) {
+          Messenger parser = (TeamMessenger) appContext.getBean("teamMessenger");
+          message = new SendMessage().setChatId(chat_id).setText(parser.getMessage(message_text.replace(aboutPatterns, "").trim()));
+          updateContact(chat_id, contact, RequestType.ABOUT_TEAM);
+      }
       else if (coincidence(message_text, swearPatterns)) {
         message = new SendMessage().setChatId(chat_id).setText(Porter.transform(message_text));
         updateContact(chat_id, contact, RequestType.SWEAR);
@@ -103,7 +110,7 @@ public class RubilnikBot extends TelegramLongPollingBot {
                               name + ", ты заебал",
                               name + ", с тобой не общаюсь",
                               "Отвали", "" +
-                              "Я занят, непонятно, " + name + " ?",
+                              "Я занят, непонятно, " + name + "?",
                               "Ладно, " + name + ":\n" + message
                       };
               Random rand = new Random();

@@ -8,7 +8,7 @@ import lombok.*;
 @EqualsAndHashCode
 class ContactCount {
 
-    private static final int OVERFLOW_BARRIER = 3;
+    private static final int OVERFLOW_BARRIER = 4;
     @Getter
     private String name;
     private RequestType type;
@@ -33,7 +33,7 @@ class ContactCount {
     }
 
     public boolean isOverflowed() {
-        return count >= OVERFLOW_BARRIER;
+        return count > OVERFLOW_BARRIER;
     }
 
 }

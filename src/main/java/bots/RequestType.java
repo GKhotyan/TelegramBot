@@ -5,6 +5,6 @@ package bots;
  */
 public enum  RequestType {
 
-    LIVE,AVDOTYA,NEWS,ANEKDOT,SWEAR
+    LIVE,AVDOTYA,NEWS,ANEKDOT,SWEAR,ABOUT_TEAM
 
 }
