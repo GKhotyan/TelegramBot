@@ -100,9 +100,9 @@ public class RubilnikBot extends TelegramLongPollingBot {
               String name = contactCounts.get(chat_id).getName();
               String[] mess =
                       {
-                              name + ", ты заебал.",
-                              name + ", с тобой не общаюсь.",
-                              "Отвали.", "" +
+                              name + ", ты заебал",
+                              name + ", с тобой не общаюсь",
+                              "Отвали", "" +
                               "Я занят, непонятно, " + name + " ?",
                               "Ладно, " + name + ":\n" + message
                       };
