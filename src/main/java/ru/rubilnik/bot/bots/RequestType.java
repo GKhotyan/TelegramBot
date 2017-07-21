@@ -5,6 +5,6 @@ package ru.rubilnik.bot.bots;
  */
 public enum  RequestType {
 
-    LIVE,AVDOTYA,NEWS,ANEKDOT,SWEAR,ABOUT_TEAM
+    LIVE,AVDOTYA,NEWS,ANEKDOT,SWEAR,ABOUT_TEAM,REPLACE
 
 }

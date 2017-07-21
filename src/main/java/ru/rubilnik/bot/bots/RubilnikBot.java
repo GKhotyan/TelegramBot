@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.stream.Stream;
 
+import ru.rubilnik.bot.data.model.Replacement;
 import ru.rubilnik.bot.messages.AvdotyaMessenger;
 import ru.rubilnik.bot.messages.LiveScoresMessenger;
 import ru.rubilnik.bot.messages.Messenger;
@@ -20,6 +21,7 @@ import org.telegram.telegrambots.exceptions.TelegramApiException;
 import ru.rubilnik.bot.data.ChampionatNewsData;
 import ru.rubilnik.bot.data.serialize.ChampionatNewsSerializer;
 import ru.rubilnik.bot.parsers.AnekdotParser;
+import ru.rubilnik.bot.sevice.ReplacementService;
 import ru.rubilnik.bot.utils.Porter;
 
 @Component
@@ -37,6 +39,7 @@ public class RubilnikBot extends TelegramLongPollingBot {
   String scorePatterns = "счет:счёт:как сыграл:кто ведет";
   String avdotyaPatterns = "авдотья";
   String aboutPatterns = "а что";
+  String replacePattern = "бот замена";
   String swearPatterns = "бот";
 
   private String getContact(Message message) {
@@ -93,6 +96,29 @@ public class RubilnikBot extends TelegramLongPollingBot {
           Messenger parser = (TeamMessenger) appContext.getBean("teamMessenger");
           message = new SendMessage().setChatId(chat_id).setText(parser.getMessage(message_text.trim().substring(aboutPatterns.length()).replace("?", "").trim()));
           updateContact(chat_id, contact, RequestType.ABOUT_TEAM);
+      }
+      else if (coincidence(message_text, replacePattern)) {
+        String resp = "Непонятно!";
+        if(message_text.toLowerCase().startsWith(replacePattern)) {
+          String substring = message_text.substring(replacePattern.length()).trim();
+          String[] split = substring.split(" ");
+          if(split.length == 2) {
+            if(split[0].length()>3) {
+              ReplacementService service = (ReplacementService) appContext.getBean("replacementServiceImpl");
+              try {
+                service.save(new Replacement(split[0], split[1]));
+                resp = "Замена произведена";
+              } catch (Throwable th) {
+                resp = "Проблемы при сохранении";
+              }
+            }
+            else {
+              resp = "Короткое какое-то слово. Отказать.";
+            }
+          }
+        }
+        message = new SendMessage().setChatId(chat_id).setText(resp);
+        updateContact(chat_id, contact, RequestType.REPLACE);
       }
       else if (coincidence(message_text, swearPatterns)) {
         message = new SendMessage().setChatId(chat_id).setText(Porter.transform(message_text));

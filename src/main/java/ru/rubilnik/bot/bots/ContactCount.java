@@ -23,7 +23,7 @@ class ContactCount {
     }
 
     public void updateContact(@NonNull String name, @NonNull RequestType type) {
-        if (this.name.equals(name) && this.type == type) {
+        if (this.name.equals(name) && this.type == type && type!=RequestType.REPLACE) {
             this.count++;
         } else {
             this.name = name;
