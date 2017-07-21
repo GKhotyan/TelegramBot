@@ -5,6 +5,7 @@ import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.rubilnik.bot.populators.RfplNewsPopulator;
+import ru.rubilnik.bot.utils.net.JsonClient;
 import ru.rubilnik.bot.utils.net.WebClient;
 
 import java.util.Optional;
@@ -38,7 +39,7 @@ public class LiveScoresMessenger implements Messenger {
                     for (Object d : data) {
                         JSONObject match = (JSONObject) d;
                         if (match.get("on_main").equals("1")) {
-                            results.append(match.get("time")).append(" ").append(match.get("name")).append(" ").append(match.get("result")).append(" (").append(match.get("status")).append(")\n");
+                            results.append(match.get("time")).append(" ").append(match.get("name_m")).append(" ").append(match.get("result")).append(" (").append(match.get("status")).append(")\n");
                         }
                     }
                     if (results.length() != 0) {
@@ -48,6 +49,7 @@ public class LiveScoresMessenger implements Messenger {
                 }
             });
         } catch (Throwable th) {
+            th.printStackTrace();
             return "Все пошло по пизде.";
         }
         if (result.length() == 0) {
@@ -59,6 +61,10 @@ public class LiveScoresMessenger implements Messenger {
     @Override
     public String getMessage(String name) {
         throw new UnsupportedOperationException();
+    }
+
+    public static void main(String[] args) {
+        System.out.println(new LiveScoresMessenger().getMessage());
     }
 
 }
