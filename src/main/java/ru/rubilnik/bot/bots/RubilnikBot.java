@@ -126,7 +126,7 @@ public class RubilnikBot extends TelegramLongPollingBot {
       }
 
       try{
-          if (contactCounts.get(chat_id)!=null && contactCounts.get(chat_id).isOverflowed() && message != null) {
+          if (message != null && contactCounts.get(chat_id)!=null && contactCounts.get(chat_id).isOverflowed()) {
               String name = contactCounts.get(chat_id).getName();
               String[] mess =
                       {
