@@ -1,5 +1,8 @@
 package ru.rubilnik.bot.bots;
 
+import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -12,6 +15,7 @@ import ru.rubilnik.bot.bots.data.NoMessageException;
 import ru.rubilnik.bot.bots.data.ParsedMessage;
 import ru.rubilnik.bot.bots.data.PatternList;
 import ru.rubilnik.bot.bots.data.PatternType;
+import org.telegram.telegrambots.api.methods.send.SendPhoto;
 import ru.rubilnik.bot.data.model.Replacement;
 import ru.rubilnik.bot.messages.AvdotyaMessenger;
 import ru.rubilnik.bot.messages.LiveScoresMessenger;
@@ -28,7 +32,9 @@ import org.telegram.telegrambots.exceptions.TelegramApiException;
 import ru.rubilnik.bot.data.ChampionatNewsData;
 import ru.rubilnik.bot.data.serialize.ChampionatNewsSerializer;
 import ru.rubilnik.bot.parsers.AnekdotParser;
+import ru.rubilnik.bot.parsers.YandexImageParser;
 import ru.rubilnik.bot.sevice.ReplacementService;
+import ru.rubilnik.bot.utils.ImagesUtil;
 import ru.rubilnik.bot.utils.Porter;
 
 @Component
@@ -48,12 +54,13 @@ public class RubilnikBot extends TelegramLongPollingBot {
   private String anekdotPatterns = "боян:баян:анекдот";
   private String replacePattern = "бот замена";
   private String swearPatterns = "бот";
+    private  String photoPatterns = "фото";
 
   private String getContact(Message message) {
     if(message!=null && message.getFrom()!=null) {
       return message.getFrom().getUserName()==null?message.getFrom().getFirstName():message.getFrom().getUserName();
     }
-    return null;
+    return "default";
   }
 
   @Override
@@ -110,6 +117,25 @@ public class RubilnikBot extends TelegramLongPollingBot {
         } else if (coincidence(parsedMessage.getMessage(), swearPatterns)) {
           message = new SendMessage().setChatId(parsedMessage.getChatId()).setText(Porter.transform(parsedMessage.getMessage()));
           updateContact(parsedMessage.getChatId(), parsedMessage.getContact(), PatternType.SWEAR);
+        }
+      }
+      else if(coincidence(message_text, photoPatterns)){
+        if(message_text.toLowerCase().startsWith(photoPatterns)) {
+          String substring = message_text.substring(photoPatterns.length()).trim();
+          YandexImageParser yandexImageParser = (YandexImageParser) appContext.getBean("yandexImageParser");
+          ImagesUtil imagesUtil = (ImagesUtil) appContext.getBean("imagesUtil");
+          try {
+            String imageUrl = yandexImageParser.getRandomImageURL(substring);
+            if(imageUrl!=null) {
+              InputStream is = imagesUtil.getImageInputStream(imageUrl);
+              SendPhoto photoMessage = new SendPhoto().setChatId(chat_id).setNewPhoto("image", is);
+              sendPhoto(photoMessage);
+            } else {
+              sendMessage(new SendMessage().setChatId(chat_id).setText("нет таких фото"));
+            }
+          } catch (Exception e) {
+            e.printStackTrace();
+          }
         }
       }
 
