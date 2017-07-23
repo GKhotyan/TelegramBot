@@ -34,11 +34,9 @@ public class RfplNewsPopulator {
 
     public String populate(String text) {
 
-        String clean = text.replaceAll("[^а-яА-Я\\s]", "").replaceAll("\n", "");
-        String[] split = clean.split(" ");
-
-        Stream.of(split).filter(s-> !StringUtils.isEmpty(s)).forEach(s -> {
-            replacementService.findByFrom(s.trim()).map(Replacement::getToWord).ifPresent(to -> replacementMap.put(s, to));
+        Iterable<Replacement> all = replacementService.getAll();
+        all.forEach(r-> {
+            replacementMap.put(r.getFromWord(), r.getToWord());
         });
 
         for (Map.Entry<String, String> entry : replacementMap.entrySet()) {
