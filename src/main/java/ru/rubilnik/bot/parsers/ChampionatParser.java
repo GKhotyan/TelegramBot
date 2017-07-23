@@ -11,8 +11,14 @@ import org.springframework.stereotype.Component;
 import ru.rubilnik.bot.populators.RfplNewsPopulator;
 import ru.rubilnik.bot.utils.TelegramSender;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @Component
 public class ChampionatParser {
@@ -60,8 +66,6 @@ public class ChampionatParser {
   }
 
        public static void main(String[] args) {
-        ChampionatParser championatParser = new ChampionatParser();
-        championatParser.parseNews();
 
-  }
+       }
 }
