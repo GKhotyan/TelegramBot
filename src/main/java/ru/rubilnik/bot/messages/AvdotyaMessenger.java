@@ -5,6 +5,8 @@ import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
+import ru.rubilnik.bot.bots.data.MessageCommand;
+import ru.rubilnik.bot.bots.data.ParsedMessage;
 
 import java.io.IOException;
 import java.net.URL;
@@ -19,19 +21,18 @@ public class AvdotyaMessenger implements Messenger {
 
     private static final String URL = "http://calendareveryday.ru";
 
-    public String getMessage() {
+    public String getMessage(MessageCommand command) {
         try {
             String url = URL + "/?id=narodn/" + currentDate();
             Document doc = Jsoup.parse(new URL(url), 30000);
             Elements elements = doc.select("div#content > p");
             if (elements != null && elements.size() >= 2) {
                 String header = elements.get(1).text();
-                if(!StringUtils.isEmpty(header)) {
-                    if(header.contains("(")) {
+                if (!StringUtils.isEmpty(header)) {
+                    if (header.contains("(")) {
                         header = header.substring(0, header.indexOf("(")).trim() + ".\n";
                     }
-                }
-                else {
+                } else {
                     header = "";
                 }
                 return header + elements.get(2).text();
@@ -42,19 +43,9 @@ public class AvdotyaMessenger implements Messenger {
         return "Ничего не найдено. Все из-за VitalyVk";
     }
 
-    @Override
-    public String getMessage(String name) {
-        throw new UnsupportedOperationException();
-    }
-
     private String currentDate() {
         SimpleDateFormat sdf = new SimpleDateFormat("M/d");
         return sdf.format(new Date());
     }
-
-    public static void main(String[] args) {
-        System.out.println(new AvdotyaMessenger().getMessage());
-    }
-
 
 }

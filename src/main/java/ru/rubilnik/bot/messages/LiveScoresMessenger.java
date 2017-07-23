@@ -4,8 +4,8 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ru.rubilnik.bot.bots.data.MessageCommand;
 import ru.rubilnik.bot.populators.RfplNewsPopulator;
-import ru.rubilnik.bot.utils.net.JsonClient;
 import ru.rubilnik.bot.utils.net.WebClient;
 
 import java.util.Optional;
@@ -16,15 +16,18 @@ import java.util.Optional;
 @Component
 public class LiveScoresMessenger implements Messenger {
 
-    @Autowired
-    private
-    RfplNewsPopulator rfplNewsPopulator;
-    @Autowired
-    private WebClient webClient;
+    private final RfplNewsPopulator rfplNewsPopulator;
+    private final WebClient webClient;
 
     private final static String SCORE_URL = "https://www.championat.com/live/live.json";
 
-    public String getMessage() {
+    @Autowired
+    public LiveScoresMessenger(RfplNewsPopulator rfplNewsPopulator, WebClient webClient) {
+        this.rfplNewsPopulator = rfplNewsPopulator;
+        this.webClient = webClient;
+    }
+
+    public String getMessage(MessageCommand command) {
         StringBuilder result = new StringBuilder();
         try {
             Optional<JSONObject> json = webClient.httpGet(SCORE_URL);
@@ -56,15 +59,6 @@ public class LiveScoresMessenger implements Messenger {
             return "Бот не смог ничего найти. Виноват - Виталик.";
         }
         return rfplNewsPopulator.populate(result.toString());
-    }
-
-    @Override
-    public String getMessage(String name) {
-        throw new UnsupportedOperationException();
-    }
-
-    public static void main(String[] args) {
-        System.out.println(new LiveScoresMessenger().getMessage());
     }
 
 }

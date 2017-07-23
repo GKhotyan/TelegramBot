@@ -20,6 +20,6 @@ public class DefaultScheduler {
 
   @Scheduled(cron="${rubilnik.scheduler.cron}")
   public void schedule() {
-    telegramSender.send(avdotyaMessenger.getMessage());
+    telegramSender.send(avdotyaMessenger.getMessage(null));
   }
 }

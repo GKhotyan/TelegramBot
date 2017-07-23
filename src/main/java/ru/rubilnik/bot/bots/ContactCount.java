@@ -1,29 +1,30 @@
 package ru.rubilnik.bot.bots;
 
 import lombok.*;
+import ru.rubilnik.bot.bots.data.PatternType;
 
 /**
  * Created by Alexey on 20.07.2017.
  */
 @EqualsAndHashCode
-class ContactCount {
+public class ContactCount {
 
     private static final int OVERFLOW_BARRIER = 4;
     @Getter
     private String name;
-    private RequestType type;
+    private PatternType type;
     private int count;
 
     static ContactCount emptyInstance() {
         ContactCount contactCount = new ContactCount();
         contactCount.name = "";
-        contactCount.type = RequestType.AVDOTYA;
+        contactCount.type = PatternType.AVDOTYA;
         contactCount.count = 0;
         return contactCount;
     }
 
-    public void updateContact(@NonNull String name, @NonNull RequestType type) {
-        if (this.name.equals(name) && this.type == type && type!=RequestType.REPLACE) {
+    public void updateContact(@NonNull String name, @NonNull PatternType type) {
+        if (this.name.equals(name) && this.type == type && type!= PatternType.REPLACE) {
             this.count++;
         } else {
             this.name = name;

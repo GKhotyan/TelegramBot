@@ -1,5 +1,7 @@
 package ru.rubilnik.bot.messages;
 
+import ru.rubilnik.bot.bots.data.MessageCommand;
+import ru.rubilnik.bot.bots.data.ParsedMessage;
 import ru.rubilnik.bot.messages.data.ChampionatTeams;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -18,12 +20,8 @@ public class TeamMessenger implements Messenger {
     private static final String URL = "https://www.championat.com/football/";
 
     @Override
-    public String getMessage() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public String getMessage(String name) {
+    public String getMessage(MessageCommand command) {
+        String name = extractName(command);
         String result = "К сожалению я ничего не знаю про " + name;
         try {
             String url = createURL(name);
@@ -80,10 +78,8 @@ public class TeamMessenger implements Messenger {
         } else throw new IllegalArgumentException();
     }
 
-    public static void main(String[] args){
-        String trim = "А что Динамо".trim().substring("А что".length()).replace("?", "").trim();
-        System.out.println(new TeamMessenger().getMessage(trim));
+    private String extractName(MessageCommand command) {
+        return command.getParsedMessage().getMessage().trim().substring(command.getPattern().length()).replace("?", "").trim();
     }
-
 
 }
