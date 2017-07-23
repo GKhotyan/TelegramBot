@@ -7,6 +7,7 @@ import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.telegram.telegrambots.api.methods.ParseMode;
 import ru.rubilnik.bot.bots.data.NoMessageException;
 import ru.rubilnik.bot.bots.data.ParsedMessage;
 import ru.rubilnik.bot.bots.data.PatternList;
@@ -125,8 +126,10 @@ public class RubilnikBot extends TelegramLongPollingBot {
                       };
               Random rand = new Random();
               sendMessage(new SendMessage().setChatId(parsedMessage.getChatId()).setText(mess[rand.nextInt(mess.length)]));
-          } else if (message != null)
-              sendMessage(message);
+          } else if (message != null) {
+            message.enableMarkdown(true);
+            sendMessage(message);
+          }
       }
       catch (TelegramApiException e) {
         e.printStackTrace();

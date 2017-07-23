@@ -36,7 +36,7 @@ public class LiveScoresMessenger implements Messenger {
                 JSONObject match_data = (JSONObject) football.get("match_data");
                 for (Object key : match_data.keySet()) {
                     JSONObject champ = (JSONObject) match_data.get(key);
-                    String title = champ.get("name") + "\n---------------\n";
+                    String title = "*" + champ.get("name") + "*\n---------------\n";
                     JSONArray data = (JSONArray) champ.get("m_data");
                     StringBuilder results = new StringBuilder();
                     for (Object d : data) {
@@ -47,8 +47,8 @@ public class LiveScoresMessenger implements Messenger {
                     }
                     if (results.length() != 0) {
                         result.append(title).append(results);
+                        result.append("\n");
                     }
-                    result.append("\n");
                 }
             });
         } catch (Throwable th) {
