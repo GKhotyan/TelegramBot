@@ -15,7 +15,8 @@ public class YandexImageParser {
 
     public String getRandomImageURL(String text){
         try{
-            Document doc = Jsoup.parse(new URL(url+text), 30000);
+            String full_url = url+text.replaceAll(" ", "%20");
+            Document doc = Jsoup.parse(new URL(full_url), 30000);
             Elements elements = doc.select("img[class=serp-item__thumb]");
             if(elements.size()>0) {
                 Random rand = new Random();
