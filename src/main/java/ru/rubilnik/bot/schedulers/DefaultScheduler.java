@@ -1,10 +1,13 @@
 package ru.rubilnik.bot.schedulers;
 
-import ru.rubilnik.bot.messages.Messenger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.telegram.telegrambots.api.methods.BotApiMethod;
+import org.telegram.telegrambots.api.methods.send.SendMessage;
+import org.telegram.telegrambots.api.objects.Message;
+import ru.rubilnik.bot.bots.service.BotService;
 import ru.rubilnik.bot.utils.TelegramSender;
 
 @EnableScheduling
@@ -12,7 +15,7 @@ import ru.rubilnik.bot.utils.TelegramSender;
 public class DefaultScheduler {
 
   @Autowired
-  private Messenger avdotyaMessenger;
+  private BotService avdotyaService;
 
   @Autowired
   private
@@ -20,6 +23,7 @@ public class DefaultScheduler {
 
   @Scheduled(cron="${rubilnik.scheduler.cron}")
   public void schedule() {
-    telegramSender.send(avdotyaMessenger.getMessage(null));
+    SendMessage message = (SendMessage) avdotyaService.getMessage(null).getBotApiMethod();
+    telegramSender.send(message.getText());
   }
 }

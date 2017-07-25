@@ -1,4 +1,4 @@
-package ru.rubilnik.bot.messages.data;
+package ru.rubilnik.bot.bots.service.data;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

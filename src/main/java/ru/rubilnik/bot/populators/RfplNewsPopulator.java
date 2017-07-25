@@ -2,14 +2,11 @@ package ru.rubilnik.bot.populators;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 import ru.rubilnik.bot.data.model.Replacement;
-import ru.rubilnik.bot.sevice.ReplacementService;
+import ru.rubilnik.bot.service.ReplacementService;
 
 @Component
 public class RfplNewsPopulator {

@@ -1,8 +1,10 @@
-package ru.rubilnik.bot.messages;
+package ru.rubilnik.bot.bots.service;
 
+import ru.rubilnik.bot.bots.data.FullMessage;
 import ru.rubilnik.bot.bots.data.MessageCommand;
-import ru.rubilnik.bot.bots.data.ParsedMessage;
-import ru.rubilnik.bot.messages.data.ChampionatTeams;
+import ru.rubilnik.bot.bots.data.MessageType;
+import ru.rubilnik.bot.bots.data.PatternType;
+import ru.rubilnik.bot.bots.service.data.ChampionatTeams;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -15,12 +17,12 @@ import java.net.URL;
  * Created by Alexey on 20.07.2017.
  */
 @Component
-public class TeamMessenger implements Messenger {
+public class TeamService extends DefaultService implements BotService {
 
     private static final String URL = "https://www.championat.com/football/";
 
     @Override
-    public String getMessage(MessageCommand command) {
+    public FullMessage getMessage(MessageCommand command) {
         String name = extractName(command);
         String result = "К сожалению я ничего не знаю про " + name;
         try {
@@ -34,11 +36,10 @@ public class TeamMessenger implements Messenger {
                 }
                 result += parseNextGame(elements.get(nextGameIndex));
             }
-            return result;
         } catch (Throwable e) {
             //do nothing
         }
-        return result;
+        return new FullMessage(createMessage(result, command.getParsedMessage().getChatId()), PatternType.ABOUT_TEAM, MessageType.NORMAL);
     }
 
     private int getNextGameIndex(Elements elements) {

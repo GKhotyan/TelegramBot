@@ -2,26 +2,43 @@ package ru.rubilnik.bot.bots.data;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import ru.rubilnik.bot.bots.data.PatternType;
 import ru.rubilnik.bot.bots.functions.FitFunctions;
-import ru.rubilnik.bot.messages.Messenger;
+import ru.rubilnik.bot.bots.service.BotService;
+
+import java.util.function.BiFunction;
 
 /**
  * Created by Alexey on 22.07.2017.
  */
-@AllArgsConstructor
 public class Pattern {
     @Getter
     private String pattern;
     @Getter
     private PatternType type;
     @Getter
-    private Messenger messenger;
+    private BotService service;
     @Getter
     private int priority;
+    @Getter
+    private String description;
+    @Getter
+    private BiFunction<String, String, Boolean> fitFunction;
+
+    public Pattern(String pattern, PatternType type, BotService service, int priority, String description, BiFunction<String, String, Boolean> fitFunction) {
+        this.pattern = pattern;
+        this.type = type;
+        this.service = service;
+        this.priority = priority;
+        this.description = description;
+        this.fitFunction = fitFunction;
+    }
+
+    public Pattern(String pattern, PatternType type, BotService service, int priority, String description) {
+        this(pattern, type, service, priority, description, FitFunctions.defaultFunction);
+    }
 
     public boolean isFit(String text) {
-        return FitFunctions.defaultFunction.apply(pattern, text);
+        return fitFunction.apply(pattern, text);
     }
 
 }

@@ -24,7 +24,7 @@ public class ContactCount {
     }
 
     public void updateContact(@NonNull String name, @NonNull PatternType type) {
-        if (this.name.equals(name) && this.type == type && type!= PatternType.REPLACE) {
+        if (this.name.equals(name) && this.type == type && type.isCount()) {
             this.count++;
         } else {
             this.name = name;

@@ -1,10 +1,10 @@
-package ru.rubilnik.bot.sevice.impl;
+package ru.rubilnik.bot.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.rubilnik.bot.data.repository.ReplacementRepository;
 import ru.rubilnik.bot.data.model.Replacement;
-import ru.rubilnik.bot.sevice.ReplacementService;
+import ru.rubilnik.bot.service.ReplacementService;
 
 import java.util.Optional;
 

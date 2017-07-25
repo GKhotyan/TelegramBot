@@ -1,12 +1,15 @@
-package ru.rubilnik.bot.messages;
+package ru.rubilnik.bot.bots.service;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
+import org.telegram.telegrambots.api.methods.send.SendMessage;
+import ru.rubilnik.bot.bots.data.FullMessage;
 import ru.rubilnik.bot.bots.data.MessageCommand;
-import ru.rubilnik.bot.bots.data.ParsedMessage;
+import ru.rubilnik.bot.bots.data.MessageType;
+import ru.rubilnik.bot.bots.data.PatternType;
 
 import java.io.IOException;
 import java.net.URL;
@@ -17,11 +20,12 @@ import java.util.Date;
  * Created by Alexey on 20.07.2017.
  */
 @Component
-public class AvdotyaMessenger implements Messenger {
+public class AvdotyaService extends DefaultService implements BotService {
 
     private static final String URL = "http://calendareveryday.ru";
 
-    public String getMessage(MessageCommand command) {
+    public FullMessage getMessage(MessageCommand command) {
+        String result = "Ничего не найдено.";
         try {
             String url = URL + "/?id=narodn/" + currentDate();
             Document doc = Jsoup.parse(new URL(url), 30000);
@@ -35,12 +39,12 @@ public class AvdotyaMessenger implements Messenger {
                 } else {
                     header = "";
                 }
-                return header + elements.get(2).text();
+                result = header + elements.get(2).text();
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return "Ничего не найдено. Все из-за VitalyVk";
+        return new FullMessage(createMessage(result, command.getParsedMessage().getChatId()), PatternType.AVDOTYA, MessageType.NORMAL);
     }
 
     private String currentDate() {

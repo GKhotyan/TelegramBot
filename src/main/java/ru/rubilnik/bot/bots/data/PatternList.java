@@ -1,18 +1,17 @@
 package ru.rubilnik.bot.bots.data;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.api.objects.Update;
-import ru.rubilnik.bot.bots.ContactCount;
-import ru.rubilnik.bot.messages.AvdotyaMessenger;
-import ru.rubilnik.bot.messages.LiveScoresMessenger;
-import ru.rubilnik.bot.messages.TeamMessenger;
+import ru.rubilnik.bot.bots.service.*;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+
+import static ru.rubilnik.bot.bots.functions.FitFunctions.*;
 
 /**
  * Created by Alexey on 23.07.2017.
@@ -22,40 +21,46 @@ public class PatternList {
 
     @Getter
     private List<Pattern> patterns = new ArrayList<>();
-    private final LiveScoresMessenger liveScoresMessenger;
-    private final AvdotyaMessenger avdotyaMessenger;
-    private final TeamMessenger teamMessenger;
+    private final LiveScoresService liveScoresService;
+    private final AvdotyaService avdotyaService;
+    private final TeamService teamService;
+    private final ReplaceCommandService replaceCommandService;
+    private final SwearService swearService;
+    private final PhotoService photoService;
+    private final CommandsService commandsService;
 
     @PostConstruct
     private void init() {
-        patterns.add(new Pattern("счет:счёт:как сыграл:кто ведет", PatternType.LIVE, liveScoresMessenger, 3));
-        patterns.add(new Pattern("авдотья", PatternType.AVDOTYA, avdotyaMessenger, 4));
-        patterns.add(new Pattern("а что", PatternType.ABOUT_TEAM, teamMessenger, 5));
-        patterns.sort(Comparator.comparingInt(Pattern::getPriority).reversed());
+        patterns.add(new Pattern("фото", PatternType.PHOTO, photoService, 0, "Высылает фото по запросу", startWithFunction));
+        patterns.add(new Pattern("счет:счёт:как сыграл:кто ведет", PatternType.LIVE, liveScoresService, 3, "Показывает текущие результаты"));
+        patterns.add(new Pattern("авдотья", PatternType.AVDOTYA, avdotyaService, 4, "Выводит народный календарь"));
+        patterns.add(new Pattern("а что", PatternType.ABOUT_TEAM, teamService, 5, "Выводит данные о матчах комнад", startWithFunction));
+        patterns.add(new Pattern("бот замена", PatternType.REPLACE, replaceCommandService, 6, "Автозамена в новостях и результатах", startWithFunction));
+        patterns.add(new Pattern("команды", PatternType.COMMANDS, commandsService, 7, "Список комманд для бота", startWithFunction));
+        patterns.add(new Pattern("бот", PatternType.SWEAR, swearService, Integer.MAX_VALUE, "Хуебот"));
+        patterns.sort(Comparator.comparingInt(Pattern::getPriority));
+        commandsService.setPatterns(patterns);
     }
 
-    public PatternList(LiveScoresMessenger liveScoresMessenger, AvdotyaMessenger avdotyaMessenger, TeamMessenger teamMessenger) {
-        this.liveScoresMessenger = liveScoresMessenger;
-        this.avdotyaMessenger = avdotyaMessenger;
-        this.teamMessenger = teamMessenger;
+    @Autowired
+    public PatternList(LiveScoresService liveScoresService, AvdotyaService avdotyaService, TeamService teamService, ReplaceCommandService replaceCommandService, SwearService swearService, PhotoService photoService, CommandsService commandsService) {
+        this.liveScoresService = liveScoresService;
+        this.avdotyaService = avdotyaService;
+        this.teamService = teamService;
+        this.replaceCommandService = replaceCommandService;
+        this.swearService = swearService;
+        this.photoService = photoService;
+        this.commandsService = commandsService;
     }
 
-    public FullMessage getMessage(Update update) throws NoMessageException {
+    public FullMessage getMessage(Update update) {
         ParsedMessage parsedMessage = new ParsedMessage(update);
         for (Pattern p : patterns) {
-            if(p.isFit(parsedMessage.getMessage())) {
-                return new FullMessage(p.getMessenger().getMessage(new MessageCommand(parsedMessage, p.getPattern())), p.getType());
+            if (p.isFit(parsedMessage.getMessage())) {
+                return p.getService().getMessage(new MessageCommand(parsedMessage, p.getPattern()));
             }
         }
-        throw new NoMessageException();
-    }
-
-    @AllArgsConstructor
-    public static class FullMessage {
-        @Getter
-        private final String message;
-        @Getter
-        private final PatternType type;
+        return FullMessage.EmptyMessage();
     }
 
 }

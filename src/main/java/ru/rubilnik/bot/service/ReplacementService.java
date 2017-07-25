@@ -1,4 +1,4 @@
-package ru.rubilnik.bot.sevice;
+package ru.rubilnik.bot.service;
 
 import ru.rubilnik.bot.data.model.Replacement;
 

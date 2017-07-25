@@ -1,10 +1,13 @@
-package ru.rubilnik.bot.messages;
+package ru.rubilnik.bot.bots.service;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ru.rubilnik.bot.bots.data.FullMessage;
 import ru.rubilnik.bot.bots.data.MessageCommand;
+import ru.rubilnik.bot.bots.data.MessageType;
+import ru.rubilnik.bot.bots.data.PatternType;
 import ru.rubilnik.bot.populators.RfplNewsPopulator;
 import ru.rubilnik.bot.utils.net.WebClient;
 
@@ -14,7 +17,7 @@ import java.util.Optional;
  * Created by Alexey on 20.07.2017.
  */
 @Component
-public class LiveScoresMessenger implements Messenger {
+public class LiveScoresService extends DefaultService implements BotService {
 
     private final RfplNewsPopulator rfplNewsPopulator;
     private final WebClient webClient;
@@ -22,13 +25,14 @@ public class LiveScoresMessenger implements Messenger {
     private final static String SCORE_URL = "https://www.championat.com/live/live.json";
 
     @Autowired
-    public LiveScoresMessenger(RfplNewsPopulator rfplNewsPopulator, WebClient webClient) {
+    public LiveScoresService(RfplNewsPopulator rfplNewsPopulator, WebClient webClient) {
         this.rfplNewsPopulator = rfplNewsPopulator;
         this.webClient = webClient;
     }
 
-    public String getMessage(MessageCommand command) {
-        StringBuilder result = new StringBuilder();
+    public FullMessage getMessage(MessageCommand command) {
+        String result = "";
+        StringBuilder sb = new StringBuilder();
         try {
             Optional<JSONObject> json = webClient.httpGet(SCORE_URL);
             json.ifPresent(j -> {
@@ -42,23 +46,24 @@ public class LiveScoresMessenger implements Messenger {
                     for (Object d : data) {
                         JSONObject match = (JSONObject) d;
                         if (match.get("on_main").equals("1")) {
-                            results.append(match.get("time")).append(" ").append(match.get("name_m")).append(" ").append(match.get("result")).append(" (").append(match.get("status")).append(")\n");
+                            results.append(match.get("time")).append(" ").append(match.get("name_m")).append(" ").append(match.get("sb")).append(" (").append(match.get("status")).append(")\n");
                         }
                     }
                     if (results.length() != 0) {
-                        result.append(title).append(results);
-                        result.append("\n");
+                        sb.append(title).append(results);
+                        sb.append("\n");
                     }
                 }
             });
+            result = sb.toString();
         } catch (Throwable th) {
             th.printStackTrace();
-            return "Все пошло по пизде.";
+            result = "Все пошло по пизде.";
         }
-        if (result.length() == 0) {
-            return "Бот не смог ничего найти. Виноват - Виталик.";
+        if (sb.length() == 0) {
+            result = "Бот не смог ничего найти. Виноват - Виталик.";
         }
-        return rfplNewsPopulator.populate(result.toString());
+        return new FullMessage(createMessage(rfplNewsPopulator.populate(result), command.getParsedMessage().getChatId()), PatternType.LIVE, MessageType.NORMAL);
     }
 
 }
