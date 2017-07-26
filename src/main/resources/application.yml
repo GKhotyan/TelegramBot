@@ -8,3 +8,8 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+
+logging:
+  file: ~/${spring.application.name}.log
+  level:
+    ROOT: INFO

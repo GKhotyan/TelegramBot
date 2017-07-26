@@ -34,7 +34,7 @@ public class PatternList {
         patterns.add(new Pattern("фото", PatternType.PHOTO, photoService, 0, "Высылает фото по запросу", startWithFunction));
         patterns.add(new Pattern("счет:счёт:как сыграл:кто ведет", PatternType.LIVE, liveScoresService, 3, "Показывает текущие результаты"));
         patterns.add(new Pattern("авдотья", PatternType.AVDOTYA, avdotyaService, 4, "Выводит народный календарь"));
-        patterns.add(new Pattern("а что", PatternType.ABOUT_TEAM, teamService, 5, "Выводит данные о матчах комнад", startWithFunction));
+        patterns.add(new Pattern("а что", PatternType.ABOUT_TEAM, teamService, 5, "Выводит данные о матчах команд", startWithFunction));
         patterns.add(new Pattern("бот замена", PatternType.REPLACE, replaceCommandService, 6, "Автозамена в новостях и результатах", startWithFunction));
         patterns.add(new Pattern("команды", PatternType.COMMANDS, commandsService, 7, "Список комманд для бота", startWithFunction));
         patterns.add(new Pattern("бот", PatternType.SWEAR, swearService, Integer.MAX_VALUE, "Хуебот"));
