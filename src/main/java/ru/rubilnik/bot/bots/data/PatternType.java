@@ -7,7 +7,16 @@ import lombok.Getter;
  */
 public enum PatternType {
 
-    UNKNOWN(false, false), LIVE(true, true), AVDOTYA(true, true), NEWS(true, true), ANEKDOT(true, true), SWEAR(true, false), ABOUT_TEAM(false, true), REPLACE(true, true), PHOTO(true, true), COMMANDS(false, true);
+    UNKNOWN(false, false),
+    LIVE(true, true),
+    AVDOTYA(true, true),
+    NEWS(true, true),
+    ANEKDOT(true, true),
+    SWEAR(true, false),
+    ABOUT_TEAM(false, true),
+    REPLACE(true, true),
+    PHOTO(true, true),
+    COMMANDS(false, true);
 
     @Getter
     private boolean count;

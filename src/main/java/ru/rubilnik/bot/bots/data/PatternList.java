@@ -28,10 +28,14 @@ public class PatternList {
     private final SwearService swearService;
     private final PhotoService photoService;
     private final CommandsService commandsService;
+    private final ChampionatNewsService championatNewsService;
+    private final AnekdotService anekdotService;
 
     @PostConstruct
     private void init() {
         patterns.add(new Pattern("фото", PatternType.PHOTO, photoService, 0, "Высылает фото по запросу", startWithFunction));
+        patterns.add(new Pattern("новост:что нового", PatternType.NEWS, championatNewsService, 1, "Футбольные новости"));
+        patterns.add(new Pattern("боян:баян:анекдот", PatternType.ANEKDOT, anekdotService, 2, "Анекдоты"));
         patterns.add(new Pattern("счет:счёт:как сыграл:кто ведет", PatternType.LIVE, liveScoresService, 3, "Показывает текущие результаты"));
         patterns.add(new Pattern("авдотья", PatternType.AVDOTYA, avdotyaService, 4, "Выводит народный календарь"));
         patterns.add(new Pattern("а что", PatternType.ABOUT_TEAM, teamService, 5, "Выводит данные о матчах команд", startWithFunction));
@@ -43,7 +47,7 @@ public class PatternList {
     }
 
     @Autowired
-    public PatternList(LiveScoresService liveScoresService, AvdotyaService avdotyaService, TeamService teamService, ReplaceCommandService replaceCommandService, SwearService swearService, PhotoService photoService, CommandsService commandsService) {
+    public PatternList(LiveScoresService liveScoresService, AvdotyaService avdotyaService, TeamService teamService, ReplaceCommandService replaceCommandService, SwearService swearService, PhotoService photoService, CommandsService commandsService, ChampionatNewsService championatNewsService, AnekdotService anekdotService) {
         this.liveScoresService = liveScoresService;
         this.avdotyaService = avdotyaService;
         this.teamService = teamService;
@@ -51,6 +55,8 @@ public class PatternList {
         this.swearService = swearService;
         this.photoService = photoService;
         this.commandsService = commandsService;
+        this.championatNewsService = championatNewsService;
+        this.anekdotService = anekdotService;
     }
 
     public FullMessage getMessage(Update update) {
