@@ -20,11 +20,16 @@ import java.util.Date;
  * Created by Alexey on 20.07.2017.
  */
 @Component
-public class AvdotyaService extends DefaultService implements BotService {
+public class AvdotyaService extends DefaultService implements BotService, TextScheduler {
 
     private static final String URL = "http://calendareveryday.ru";
 
     public FullMessage getMessage(MessageCommand command) {
+        String result = createMessage();
+        return new FullMessage(createMessage(result, command.getParsedMessage().getChatId()), PatternType.AVDOTYA, MessageType.NORMAL);
+    }
+
+    private String createMessage() {
         String result = "Ничего не найдено.";
         try {
             String url = URL + "/?id=narodn/" + currentDate();
@@ -44,7 +49,7 @@ public class AvdotyaService extends DefaultService implements BotService {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return new FullMessage(createMessage(result, command.getParsedMessage().getChatId()), PatternType.AVDOTYA, MessageType.NORMAL);
+        return result;
     }
 
     private String currentDate() {
@@ -52,4 +57,8 @@ public class AvdotyaService extends DefaultService implements BotService {
         return sdf.format(new Date());
     }
 
+    @Override
+    public String getMessageText() {
+        return createMessage();
+    }
 }

@@ -1,6 +1,7 @@
 package ru.rubilnik.bot.bots.data;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.telegram.telegrambots.api.objects.Message;
 import org.telegram.telegrambots.api.objects.Update;
 
