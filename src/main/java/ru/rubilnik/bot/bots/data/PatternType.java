@@ -16,7 +16,9 @@ public enum PatternType {
     ABOUT_TEAM(false, true),
     REPLACE(true, true),
     PHOTO(true, true),
-    COMMANDS(false, true);
+    COMMANDS(false, true),
+    VOTE(true, true),
+    VOTE_ANSWER(false, false);
 
     @Getter
     private boolean count;

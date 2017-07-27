@@ -17,7 +17,7 @@ import java.net.URL;
  * Created by Alexey on 20.07.2017.
  */
 @Component
-public class TeamService extends DefaultService implements BotService {
+public class TeamService extends DefaultService implements BotCommand {
 
     private static final String URL = "https://www.championat.com/football/";
 

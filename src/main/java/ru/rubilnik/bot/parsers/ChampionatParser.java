@@ -1,24 +1,17 @@
 package ru.rubilnik.bot.parsers;
 
-import ru.rubilnik.bot.data.ChampionatNewsData;
-import ru.rubilnik.bot.data.serialize.ChampionatNewsSerializer;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ru.rubilnik.bot.populators.RfplNewsPopulator;
+import ru.rubilnik.bot.data.ChampionatNewsData;
+import ru.rubilnik.bot.data.serialize.ChampionatNewsSerializer;
 import ru.rubilnik.bot.utils.TelegramSender;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URISyntaxException;
 import java.net.URL;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 @Component
 public class ChampionatParser {
@@ -34,8 +27,9 @@ public class ChampionatParser {
 
   public void parseNews(){
     try {
-      if(championatNewsData.getPostedKeysSize()==0)
+      if(championatNewsData.getPostedKeysSize()==0) {
         championatNewsSerializer.deserializePostedKeys();
+      }
 
       Document doc = Jsoup.parse(new URL(url), 30000);
       Elements elements = doc.select("div[class=news__i]");

@@ -1,10 +1,8 @@
 package ru.rubilnik.bot.bots.service;
 
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.rubilnik.bot.bots.data.*;
-import ru.rubilnik.bot.utils.Porter;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -13,7 +11,7 @@ import java.util.stream.Collectors;
  * Created by Alexey on 25.07.2017.
  */
 @Service
-public class CommandsService extends DefaultService implements BotService {
+public class CommandsService extends DefaultService implements BotCommand {
 
     @Setter
     private  List<Pattern> patterns;

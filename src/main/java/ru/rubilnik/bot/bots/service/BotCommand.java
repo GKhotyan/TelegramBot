@@ -6,7 +6,7 @@ import ru.rubilnik.bot.bots.data.MessageCommand;
 /**
  * Created by Alexey on 20.07.2017.
  */
-public interface BotService {
+public interface BotCommand {
 
     FullMessage getMessage(MessageCommand command);
 

@@ -17,7 +17,7 @@ import java.util.Optional;
  * Created by Alexey on 20.07.2017.
  */
 @Component
-public class LiveScoresService extends DefaultService implements BotService {
+public class LiveScoresService extends DefaultService implements BotCommand {
 
     private final RfplNewsPopulator rfplNewsPopulator;
     private final WebClient webClient;

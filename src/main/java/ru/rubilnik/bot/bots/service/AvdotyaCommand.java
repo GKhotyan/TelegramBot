@@ -5,7 +5,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-import org.telegram.telegrambots.api.methods.send.SendMessage;
 import ru.rubilnik.bot.bots.data.FullMessage;
 import ru.rubilnik.bot.bots.data.MessageCommand;
 import ru.rubilnik.bot.bots.data.MessageType;
@@ -20,7 +19,7 @@ import java.util.Date;
  * Created by Alexey on 20.07.2017.
  */
 @Component
-public class AvdotyaService extends DefaultService implements BotService, TextScheduler {
+public class AvdotyaCommand extends DefaultService implements BotCommand, TextScheduler {
 
     private static final String URL = "http://calendareveryday.ru";
 

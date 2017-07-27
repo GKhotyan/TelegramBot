@@ -2,15 +2,12 @@ package ru.rubilnik.bot.bots.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.telegram.telegrambots.api.methods.send.SendMessage;
-import org.telegram.telegrambots.api.methods.send.SendPhoto;
 import ru.rubilnik.bot.bots.data.FullMessage;
 import ru.rubilnik.bot.bots.data.MessageCommand;
 import ru.rubilnik.bot.bots.data.MessageType;
 import ru.rubilnik.bot.bots.data.PatternType;
 import ru.rubilnik.bot.parsers.YandexImageParser;
 import ru.rubilnik.bot.utils.ImagesUtil;
-import ru.rubilnik.bot.utils.Porter;
 
 import java.io.InputStream;
 
@@ -18,7 +15,7 @@ import java.io.InputStream;
  * Created by Alexey on 25.07.2017.
  */
 @Service
-public class PhotoService extends DefaultService implements BotService {
+public class PhotoService extends DefaultService implements BotCommand {
 
     private final YandexImageParser yandexImageParser;
     private final ImagesUtil imagesUtil;

@@ -1,9 +1,8 @@
 package ru.rubilnik.bot.bots.data;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import ru.rubilnik.bot.bots.functions.FitFunctions;
-import ru.rubilnik.bot.bots.service.BotService;
+import ru.rubilnik.bot.bots.service.BotCommand;
 
 import java.util.function.BiFunction;
 
@@ -16,7 +15,7 @@ public class Pattern {
     @Getter
     private PatternType type;
     @Getter
-    private BotService service;
+    private BotCommand service;
     @Getter
     private int priority;
     @Getter
@@ -24,7 +23,7 @@ public class Pattern {
     @Getter
     private BiFunction<String, String, Boolean> fitFunction;
 
-    public Pattern(String pattern, PatternType type, BotService service, int priority, String description, BiFunction<String, String, Boolean> fitFunction) {
+    public Pattern(String pattern, PatternType type, BotCommand service, int priority, String description, BiFunction<String, String, Boolean> fitFunction) {
         this.pattern = pattern;
         this.type = type;
         this.service = service;
@@ -33,7 +32,7 @@ public class Pattern {
         this.fitFunction = fitFunction;
     }
 
-    public Pattern(String pattern, PatternType type, BotService service, int priority, String description) {
+    public Pattern(String pattern, PatternType type, BotCommand service, int priority, String description) {
         this(pattern, type, service, priority, description, FitFunctions.defaultFunction);
     }
 

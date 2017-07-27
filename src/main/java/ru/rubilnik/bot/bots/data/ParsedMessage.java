@@ -1,5 +1,6 @@
 package ru.rubilnik.bot.bots.data;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.telegram.telegrambots.api.objects.Message;
@@ -13,7 +14,7 @@ public final class ParsedMessage {
     @Getter
     private final String message;
     @Getter
-    private final String contact;
+    private final Contact contact;
     @Getter
     private final Long chatId;
 
@@ -41,11 +42,11 @@ public final class ParsedMessage {
         throw new IllegalArgumentException("No chat Id");
     }
 
-    private String getContact(Update update) {
+    private Contact getContact(Update update) {
         if (update.getChannelPost() != null) {
-            return getContactInternal(update.getChannelPost());
+            return new Contact(getContactInternal(update.getChannelPost()), update.getChannelPost().getFrom().getId());
         } else if (update.getMessage() != null) {
-            return getContactInternal(update.getMessage());
+            return new Contact(getContactInternal(update.getMessage()), update.getMessage().getFrom().getId());
         }
         throw new IllegalArgumentException("No contact");
     }
@@ -55,6 +56,14 @@ public final class ParsedMessage {
             return message.getFrom().getUserName() == null ? message.getFrom().getFirstName() : message.getFrom().getUserName();
         }
         return "Anonymous";
+    }
+
+    @AllArgsConstructor
+    public class Contact {
+        @Getter
+        String name;
+        @Getter
+        Integer id;
     }
 
 }

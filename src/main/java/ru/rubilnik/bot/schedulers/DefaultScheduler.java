@@ -4,12 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.api.methods.BotApiMethod;
-import org.telegram.telegrambots.api.methods.send.SendMessage;
-import org.telegram.telegrambots.api.objects.Message;
-import ru.rubilnik.bot.bots.data.MessageCommand;
-import ru.rubilnik.bot.bots.data.ParsedMessage;
-import ru.rubilnik.bot.bots.service.BotService;
 import ru.rubilnik.bot.bots.service.TextScheduler;
 import ru.rubilnik.bot.utils.TelegramSender;
 

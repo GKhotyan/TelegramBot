@@ -15,7 +15,7 @@ import ru.rubilnik.bot.populators.RfplNewsPopulator;
  */
 
 @Service
-public class ChampionatNewsService extends DefaultService implements BotService {
+public class ChampionatNewsService extends DefaultService implements BotCommand {
 
     private final ChampionatNewsData championatNewsData;
     private final ChampionatNewsSerializer championatNewsSerializer;

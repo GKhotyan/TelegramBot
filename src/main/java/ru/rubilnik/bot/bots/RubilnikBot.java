@@ -37,7 +37,7 @@ public class RubilnikBot extends TelegramLongPollingBot {
 
         try {
             FullMessage fullMessage = patternList.getMessage(update);
-            updateContact(parsedMessage.getChatId(), parsedMessage.getContact(), fullMessage.getPatternType());
+            updateContact(parsedMessage.getChatId(), parsedMessage.getContact().getName(), fullMessage.getPatternType());
             if (fullMessage.getMessageType() == MessageType.NORMAL) {
                 sendChatMessage(fullMessage.getBotApiMethod(), parsedMessage);
             } else if (fullMessage.getMessageType() == MessageType.PHOTO) {

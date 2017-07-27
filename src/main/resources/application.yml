@@ -10,6 +10,6 @@ spring:
       ddl-auto: update
 
 logging:
-  file: ~/${spring.application.name}.log
+  file: rubilnik_bot.log
   level:
     ROOT: INFO

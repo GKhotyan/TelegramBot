@@ -13,7 +13,7 @@ import ru.rubilnik.bot.service.ReplacementService;
  * Created by Alexey on 25.07.2017.
  */
 @Service
-public class ReplaceCommandService extends DefaultService implements BotService {
+public class ReplaceCommandService extends DefaultService implements BotCommand {
 
     private final ReplacementService service;
 
