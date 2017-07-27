@@ -28,8 +28,6 @@ public class ChampionatParser {
   @Autowired
   ChampionatNewsSerializer championatNewsSerializer;
   @Autowired
-  RfplNewsPopulator rfplNewsPopulator;
-  @Autowired
   TelegramSender telegramSender;
 
   private static final String url = "https://www.championat.com/football/_russiapl.html";
@@ -47,10 +45,9 @@ public class ChampionatParser {
         Elements textElements = element.select("span[class=news__i__text _important]");
         if(textElements.size()>0 && !championatNewsData.isCurrentNewsContains(key)) {
           String result = textElements.text();
-          String populated_news = rfplNewsPopulator.populate(result);
-          championatNewsData.addToCurrentNews(key, populated_news);
-          if(!championatNewsData.isPostedKey(key)&&!populated_news.equals(result)){
-            telegramSender.send(populated_news);
+          championatNewsData.addToCurrentNews(key, result);
+          if(!championatNewsData.isPostedKey(key)){
+            telegramSender.send(result);
             championatNewsData.addPostedKey(key);
             championatNewsSerializer.serializePostedKeys();
           }
