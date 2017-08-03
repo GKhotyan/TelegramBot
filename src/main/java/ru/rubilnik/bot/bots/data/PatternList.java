@@ -21,7 +21,7 @@ public class PatternList {
 
     @Getter
     private List<Pattern> patterns = new ArrayList<>();
-    private final LiveScoresService liveScoresService;
+    private final LiveScoresCommand liveScoresCommand;
     private final AvdotyaCommand avdotyaCommand;
     private final TeamService teamService;
     private final ReplaceCommandService replaceCommandService;
@@ -39,22 +39,22 @@ public class PatternList {
         patterns.add(new Pattern("фото", PatternType.PHOTO, photoService, 0, "Высылает фото по запросу", startWithFunction));
         patterns.add(new Pattern("новост:что нового", PatternType.NEWS, championatNewsService, 1, "Футбольные новости"));
         patterns.add(new Pattern("боян:баян:анекдот", PatternType.ANEKDOT, anekdotCommand, 2, "Анекдоты"));
-        patterns.add(new Pattern("счет:счёт:как сыграл:кто ведет", PatternType.LIVE, liveScoresService, 3, "Показывает текущие результаты"));
+        patterns.add(new Pattern("счет:счёт:как сыграл:кто ведет", PatternType.LIVE, liveScoresCommand, 3, "Показывает текущие результаты"));
         patterns.add(new Pattern("авдотья", PatternType.AVDOTYA, avdotyaCommand, 4, "Выводит народный календарь"));
         patterns.add(new Pattern("а что", PatternType.ABOUT_TEAM, teamService, 5, "Выводит данные о матчах команд", startWithFunction));
         patterns.add(new Pattern("бот замена", PatternType.REPLACE, replaceCommandService, 6, "Автозамена в новостях и результатах", startWithFunction));
         patterns.add(new Pattern("команды", PatternType.COMMANDS, commandsService, 7, "Список комманд для бота", startWithFunction));
-        patterns.add(new Pattern("бот опрос", PatternType.VOTE, createVoteCommand, 8, "Создать опрос", startWithFunction));
-        patterns.add(new Pattern("бот_голос_", PatternType.VOTE_ANSWER, answerVoteCommand, 9, "Ответ на опрос", pollAnswerFunction));
-        patterns.add(new Pattern("результат опроса", PatternType.VOTE, voteResultCommand, 10, "Резульат опроса", startWithFunction));
+        //patterns.add(new Pattern("бот опрос", PatternType.VOTE, createVoteCommand, 8, "Создать опрос", startWithFunction));
+        //patterns.add(new Pattern("бот_голос_", PatternType.VOTE_ANSWER, answerVoteCommand, 9, "Ответ на опрос", pollAnswerFunction));
+        //patterns.add(new Pattern("результат опроса", PatternType.VOTE, voteResultCommand, 10, "Резульат опроса", startWithFunction));
         patterns.add(new Pattern("бот", PatternType.SWEAR, swearService, Integer.MAX_VALUE, "Хуебот"));
         patterns.sort(Comparator.comparingInt(Pattern::getPriority));
         commandsService.setPatterns(patterns);
     }
 
     @Autowired
-    public PatternList(LiveScoresService liveScoresService, AvdotyaCommand avdotyaCommand, TeamService teamService, ReplaceCommandService replaceCommandService, SwearService swearService, PhotoService photoService, CommandsService commandsService, ChampionatNewsService championatNewsService, AnekdotCommand anekdotCommand, CreateVoteCommand createVoteCommand, AnswerVoteCommand answerVoteCommand, VoteResultCommand voteResultCommand) {
-        this.liveScoresService = liveScoresService;
+    public PatternList(LiveScoresCommand liveScoresCommand, AvdotyaCommand avdotyaCommand, TeamService teamService, ReplaceCommandService replaceCommandService, SwearService swearService, PhotoService photoService, CommandsService commandsService, ChampionatNewsService championatNewsService, AnekdotCommand anekdotCommand, CreateVoteCommand createVoteCommand, AnswerVoteCommand answerVoteCommand, VoteResultCommand voteResultCommand) {
+        this.liveScoresCommand = liveScoresCommand;
         this.avdotyaCommand = avdotyaCommand;
         this.teamService = teamService;
         this.replaceCommandService = replaceCommandService;
