@@ -2,26 +2,45 @@ package ru.rubilnik.bot.bots.data;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.telegram.telegrambots.api.objects.Message;
 import org.telegram.telegrambots.api.objects.Update;
+
+import java.util.Optional;
 
 /**
  * Created by Alexey on 23.07.2017.
  */
 public final class ParsedMessage {
 
+    private String message = null;
     @Getter
-    private final String message;
+    private Contact contact = null;
     @Getter
-    private final Contact contact;
+    private Long chatId = null;
     @Getter
-    private final Long chatId;
+    private Optional<CallbackData> callbackData;
+
+    public String getMessage() {
+        return callbackData.map(CallbackData::getCommand).orElse(message);
+    }
 
     public ParsedMessage(Update update) {
-        this.message = getOriginalMessage(update);
-        this.contact = getContact(update);
-        this.chatId = getChatId(update);
+        this.callbackData = getCallback(update);
+        if(!callbackData.isPresent()) {
+            this.message = getOriginalMessage(update);
+            this.contact = getContact(update);
+            this.chatId = getChatId(update);
+        }
+    }
+
+    private Optional<CallbackData> getCallback(Update update) {
+        if (update.hasCallbackQuery()) {
+            String callData = update.getCallbackQuery().getData();
+            long messageId = update.getCallbackQuery().getMessage().getMessageId();
+            long chatId = update.getCallbackQuery().getMessage().getChatId();
+            return Optional.of(new CallbackData(messageId, callData, chatId));
+        }
+        return Optional.empty();
     }
 
     private String getOriginalMessage(Update update) {
@@ -64,6 +83,16 @@ public final class ParsedMessage {
         String name;
         @Getter
         Integer id;
+    }
+
+    @AllArgsConstructor
+    public class CallbackData {
+        @Getter
+        private final Long messageId;
+        @Getter
+        private String command;
+        @Getter
+        private Long chatId;
     }
 
 }

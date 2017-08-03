@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.api.methods.BotApiMethod;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
+import org.telegram.telegrambots.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.api.objects.Message;
 import org.telegram.telegrambots.api.objects.Update;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -14,6 +15,8 @@ import ru.rubilnik.bot.bots.data.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+
+import static java.lang.Math.toIntExact;
 
 @Component
 public class RubilnikBot extends TelegramLongPollingBot {
@@ -35,17 +38,33 @@ public class RubilnikBot extends TelegramLongPollingBot {
 
         ParsedMessage parsedMessage = new ParsedMessage(update);
 
-        try {
-            FullMessage fullMessage = patternList.getMessage(update);
-            updateContact(parsedMessage.getChatId(), parsedMessage.getContact().getName(), fullMessage.getPatternType());
-            if (fullMessage.getMessageType() == MessageType.NORMAL) {
-                sendChatMessage(fullMessage.getBotApiMethod(), parsedMessage);
-            } else if (fullMessage.getMessageType() == MessageType.PHOTO) {
-                sendPhoto(fullMessage.getPhotoMethod());
+        if(parsedMessage.getCallbackData().isPresent()) {
+            ParsedMessage.CallbackData callbackData = parsedMessage.getCallbackData().get();
+            String answer = "Пока все это не работает";
+            EditMessageText new_message = new EditMessageText()
+                    .setChatId(callbackData.getChatId())
+                    .setMessageId(toIntExact(callbackData.getMessageId()))
+                    .setText(answer);
+            try {
+                editMessageText(new_message);
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
             }
+        }
+        else {
 
-        } catch (TelegramApiException e) {
-            e.printStackTrace();
+            try {
+                FullMessage fullMessage = patternList.getMessage(update);
+                updateContact(parsedMessage.getChatId(), parsedMessage.getContact().getName(), fullMessage.getPatternType());
+                if (fullMessage.getMessageType() == MessageType.NORMAL) {
+                    sendChatMessage(fullMessage.getBotApiMethod(), parsedMessage);
+                } else if (fullMessage.getMessageType() == MessageType.PHOTO) {
+                    sendPhoto(fullMessage.getPhotoMethod());
+                }
+
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
         }
     }
 

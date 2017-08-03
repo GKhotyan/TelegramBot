@@ -16,7 +16,7 @@ public enum PatternType {
     ABOUT_TEAM(false, true),
     REPLACE(true, true),
     PHOTO(true, true),
-    COMMANDS(false, true),
+    COMMANDS(false, false),
     VOTE(true, true),
     VOTE_ANSWER(false, false);
 
